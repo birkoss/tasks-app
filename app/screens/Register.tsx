@@ -36,9 +36,9 @@ export default function Register({ navigation }: Props) {
                         source={require("../assets/icon.png")}
                     />
                 </View>
-                <View>
-                    <RegisterForm onRegister={register} />
-                </View>
+
+                <RegisterForm onRegister={register} />
+
                 <View style={styles.linkContainer}>
                     <TouchableOpacity
                         onPress={() => navigation.navigate("Login")}
