@@ -8,7 +8,7 @@ import {
     TextInput,
 } from "react-native";
 
-export default function LoginForm() {
+export default function LoginForm({ onLogin }) {
     let passwordInput: TextInput;
 
     return (
@@ -32,7 +32,10 @@ export default function LoginForm() {
                 style={styles.input}
                 secureTextEntry
             />
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity
+                style={styles.buttonContainer}
+                onPress={() => onLogin("my token...")}
+            >
                 <Text style={styles.buttonText}>LOGIN</Text>
             </TouchableOpacity>
         </View>

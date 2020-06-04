@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
     StyleSheet,
     View,
@@ -10,7 +10,11 @@ import {
 import LoginForm from "./LoginForm";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+import { AuthContext } from "../context";
+
 export default function Register({ navigation }) {
+    const { register } = useContext(AuthContext);
+
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
             <View style={styles.logoContainer}>
@@ -20,7 +24,7 @@ export default function Register({ navigation }) {
                 />
             </View>
             <View style={styles.formContainer}>
-                <LoginForm />
+                <LoginForm onLogin={register} />
             </View>
             <View style={styles.linkContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate("login")}>

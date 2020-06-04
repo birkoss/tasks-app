@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+
+import { AuthContext } from "../context";
 
 function Home({ navigation }) {
+    const { logout } = useContext(AuthContext);
+
     return (
         <View style={styles.background}>
             <View style={styles.logoContainer}>
                 <TouchableOpacity onPress={() => navigation.push("Details")}>
                     <Text>Home</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => logout()}>
+                    <Text>Logout</Text>
                 </TouchableOpacity>
             </View>
         </View>
