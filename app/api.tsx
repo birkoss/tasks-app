@@ -16,3 +16,20 @@ export function Register(email: string, password: string) {
 
     return fetch(req).then((response) => response.json());
 }
+
+export function Login(email: string, password: string) {
+    let h = new Headers();
+    //h.append("Authorization", "Token XXXXXX");
+    h.append("Content-Type", "application/json");
+
+    let req = new Request(url + "login", {
+        headers: h,
+        method: "POST",
+        body: JSON.stringify({
+            email,
+            password,
+        }),
+    });
+
+    return fetch(req).then((response) => response.json());
+}

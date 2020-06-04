@@ -1,20 +1,17 @@
 import React, { useState } from "react";
 import {
-    StyleSheet,
     View,
-    StatusBar,
     Text,
     TouchableOpacity,
     TextInput,
-    Button,
     Keyboard,
 } from "react-native";
 
 import { Formik } from "formik";
 
-import { globalStyles } from "../styles/global";
-
 import ErrorMessage from "../components/ErrorMessage";
+
+import { globalStyles } from "../styles/global";
 
 import { Register } from "../api";
 
@@ -37,7 +34,6 @@ export default function RegisterForm({ onRegister }: IProps) {
                     confirmPassword: "",
                 }}
                 onSubmit={(values) => {
-                    console.log(values);
                     Keyboard.dismiss();
 
                     Register(values.email, values.password)
@@ -157,7 +153,9 @@ export default function RegisterForm({ onRegister }: IProps) {
                             style={globalStyles.buttonContainer}
                             onPress={handleSubmit}
                         >
-                            <Text style={styles.buttonText}>REGISTER!</Text>
+                            <Text style={globalStyles.buttonText}>
+                                REGISTER
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 )}
@@ -165,25 +163,3 @@ export default function RegisterForm({ onRegister }: IProps) {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    buttonContainer: {
-        backgroundColor: "#2980b9",
-        paddingVertical: 15,
-    },
-    buttonText: {
-        textAlign: "center",
-        color: "#ffffff",
-        fontWeight: "700",
-    },
-    container: {
-        padding: 20,
-    },
-    input: {
-        height: 40,
-        backgroundColor: "rgba(255, 255, 255, 0.2)",
-        marginBottom: 10,
-        color: "#ffffff",
-        paddingHorizontal: 10,
-    },
-});
