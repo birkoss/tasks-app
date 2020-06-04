@@ -5,41 +5,51 @@ import {
     Text,
     Image,
     KeyboardAvoidingView,
+    Keyboard,
+    TouchableWithoutFeedback,
 } from "react-native";
 
-import LoginForm from "../components/LoginForm";
+import RegisterForm from "../components/RegisterForm";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { AuthContext } from "../context";
 
-import { LoginScreenNavigationProp } from "../types";
+import { RegisterScreenNavigationProp } from "../types";
 
 type Props = {
-    navigation: LoginScreenNavigationProp;
+    navigation: RegisterScreenNavigationProp;
 };
 
 export default function Register({ navigation }: Props) {
     const { register } = useContext(AuthContext);
 
     return (
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
-            <View style={styles.logoContainer}>
-                <Image
-                    style={styles.logo}
-                    source={require("../assets/icon.png")}
-                />
-            </View>
-            <View>
-                <LoginForm onLogin={register} />
-            </View>
-            <View style={styles.linkContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                    <Text style={styles.link}>
-                        Already have an account ? Log in
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
+        <TouchableWithoutFeedback
+            onPress={() => {
+                Keyboard.dismiss();
+            }}
+        >
+            <KeyboardAvoidingView behavior="padding" style={styles.container}>
+                <View style={styles.logoContainer}>
+                    <Image
+                        style={styles.logo}
+                        source={require("../assets/icon.png")}
+                    />
+                </View>
+                <View>
+                    <RegisterForm onRegister={register} />
+                </View>
+                <View style={styles.linkContainer}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("Login")}
+                    >
+                        <Text style={styles.link}>
+                            Already have an account ? Log in
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
     );
 }
 

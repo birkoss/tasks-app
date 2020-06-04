@@ -13,15 +13,33 @@ import Home from "../screens/Home";
 import WelcomeScreen from "../screens/WelcomeScreen";
 
 import { AuthStackParamList, HomeStackParamList } from "../types";
+import { Button } from "react-native";
 
 const AuthStack = createStackNavigator<AuthStackParamList>();
 
 const HomeStack = createStackNavigator<HomeStackParamList>();
 const HomeStackScreen = () => (
     <HomeStack.Navigator
-        screenOptions={{
-            headerStyle: { backgroundColor: "#3498db" },
-            headerTitleStyle: { color: "#ffffff" },
+        screenOptions={({ navigation }) => {
+            return {
+                headerStyle: { backgroundColor: "#3498db" },
+                headerTitleStyle: { color: "#ffffff" },
+
+                headerBackTitleStyle: { color: "#ffffff" },
+                headerTintColor: "#ffffff",
+
+                headerLeft: ({ onPress }) => (
+                    <React.Fragment>
+                        <Ionicons
+                            name="ios-menu"
+                            size={30}
+                            style={{ marginLeft: 20 }}
+                            color="white"
+                            onPress={() => navigation.toggleDrawer()}
+                        />
+                    </React.Fragment>
+                ),
+            };
         }}
     >
         <HomeStack.Screen name="Home" component={Home} />
@@ -92,7 +110,13 @@ export default function Navigation({ userToken }: Props) {
         <NavigationContainer>
             {userToken ? (
                 <Drawer.Navigator>
-                    <Drawer.Screen name="Home" component={TabsScreen} />
+                    <Drawer.Screen
+                        name="Home"
+                        component={TabsScreen}
+                        options={{
+                            drawerLabel: "Home",
+                        }}
+                    />
                     <Drawer.Screen
                         name="Profile"
                         component={ProfileStackScreen}
