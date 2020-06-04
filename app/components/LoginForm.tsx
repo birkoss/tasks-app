@@ -8,7 +8,11 @@ import {
     TextInput,
 } from "react-native";
 
-export default function LoginForm({ onLogin }) {
+interface IProps {
+    onLogin: Function;
+}
+
+export default function LoginForm({ onLogin }: IProps) {
     let passwordInput: TextInput;
 
     return (

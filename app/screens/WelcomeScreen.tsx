@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 
-function WelcomeScreen(props) {
+function WelcomeScreen() {
     return (
         <View style={styles.background}>
             <View style={styles.logoContainer}>

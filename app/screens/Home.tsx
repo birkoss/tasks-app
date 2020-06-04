@@ -1,15 +1,30 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+    View,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    StatusBar,
+} from "react-native";
 
 import { AuthContext } from "../context";
 
-function Home({ navigation }) {
+import { HomeScreenNavigationProp } from "../types";
+
+type Props = {
+    navigation: HomeScreenNavigationProp;
+};
+
+function Home({ navigation }: Props) {
     const { logout } = useContext(AuthContext);
 
     return (
         <View style={styles.background}>
+            <StatusBar barStyle="light-content" />
             <View style={styles.logoContainer}>
-                <TouchableOpacity onPress={() => navigation.push("Details")}>
+                <TouchableOpacity
+                    onPress={() => navigation.push("Details", { taskID: 10 })}
+                >
                     <Text>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => logout()}>
@@ -23,7 +38,7 @@ function Home({ navigation }) {
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        backgroundColor: "tomato",
+        backgroundColor: "white",
         justifyContent: "flex-end",
         alignItems: "center",
     },

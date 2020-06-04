@@ -7,12 +7,18 @@ import {
     KeyboardAvoidingView,
 } from "react-native";
 
-import LoginForm from "./LoginForm";
+import LoginForm from "../components/LoginForm";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { AuthContext } from "../context";
 
-export default function Register({ navigation }) {
+import { LoginScreenNavigationProp } from "../types";
+
+type Props = {
+    navigation: LoginScreenNavigationProp;
+};
+
+export default function Register({ navigation }: Props) {
     const { register } = useContext(AuthContext);
 
     return (
@@ -23,11 +29,11 @@ export default function Register({ navigation }) {
                     source={require("../assets/icon.png")}
                 />
             </View>
-            <View style={styles.formContainer}>
+            <View>
                 <LoginForm onLogin={register} />
             </View>
             <View style={styles.linkContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate("login")}>
+                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                     <Text style={styles.link}>
                         Already have an account ? Log in
                     </Text>

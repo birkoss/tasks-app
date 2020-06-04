@@ -7,12 +7,19 @@ import {
     Text,
 } from "react-native";
 
-import LoginForm from "./LoginForm";
 import { TouchableOpacity } from "react-native-gesture-handler";
+
+import LoginForm from "../components/LoginForm";
+
+import { LoginScreenNavigationProp } from "../types";
 
 import { AuthContext } from "../context";
 
-export default function Login({ navigation }) {
+type Props = {
+    navigation: LoginScreenNavigationProp;
+};
+
+export default function Login({ navigation }: Props) {
     const { login } = useContext(AuthContext);
     return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -22,15 +29,15 @@ export default function Login({ navigation }) {
                     source={require("../assets/icon.png")}
                 />
             </View>
-            <View style={styles.formContainer}>
+            <View>
                 <LoginForm onLogin={login} />
             </View>
             <View style={styles.linkContainer}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate("register")}
+                    onPress={() => navigation.navigate("Register")}
                 >
                     <Text style={styles.link}>
-                        New here ? Create an account
+                        New here? Create an account!
                     </Text>
                 </TouchableOpacity>
             </View>

@@ -1,59 +1,45 @@
-import React from "react";
-import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    TouchableWithoutFeedback,
-    TouchableOpacity,
-    TouchableHighlight,
-    SafeAreaView,
-    Button,
-    Alert,
-} from "react-native";
+import React, { useState, useEffect, useMemo } from "react";
+import { StyleSheet } from "react-native";
+
+import Splash from "./app/screens/Splash";
+import Navigation from "./app/components/Navigation";
+
+import { AuthContext } from "./app/context";
 
 export default function App() {
-    let x = 1;
-    console.log("asasassa");
+    const [isLoading, setIsLoading] = useState(true);
+    const [userToken, setUserToken] = useState("");
+
+    const authContext = useMemo(() => {
+        return {
+            login: (token: string = "") => {
+                setUserToken(token);
+                setIsLoading(false);
+            },
+            register: (token: string = "") => {
+                setUserToken(token);
+                setIsLoading(false);
+            },
+            logout: () => {
+                setUserToken("");
+                setIsLoading(false);
+            },
+        };
+    }, []);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
+    }, []);
+
+    if (isLoading) {
+        return <Splash />;
+    }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Text>Testing 1234</Text>
-            <Button
-                color="orange"
-                title="Click me"
-                onPress={() =>
-                    Alert.alert("TItre", "Message", [
-                        {
-                            text: "Yes",
-                            onPress: () => console.log("YES"),
-                        },
-                        {
-                            text: "Nop",
-                            onPress: () => console.log("NOP"),
-                        },
-                    ])
-                }
-            />
-            <Image source={require("./app/assets/icon.png")} />
-            <TouchableHighlight onPress={() => console.log("Image tapped")}>
-                <Image
-                    source={{
-                        width: 200,
-                        height: 300,
-                        uri: "https://picsum.photos/200/300",
-                    }}
-                />
-            </TouchableHighlight>
-        </SafeAreaView>
+        <AuthContext.Provider value={authContext}>
+            <Navigation userToken={userToken} />
+        </AuthContext.Provider>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "white",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-});

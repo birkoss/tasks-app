@@ -1,3 +1,15 @@
-import React from "react";
+import React, {
+    createContext,
+    Dispatch,
+    Reducer,
+    useContext,
+    useReducer,
+} from "react";
 
-export const AuthContext = React.createContext();
+interface IContextProps {
+    logout: Function;
+    login: Function;
+    register: Function;
+}
+
+export const AuthContext = React.createContext({} as IContextProps);
