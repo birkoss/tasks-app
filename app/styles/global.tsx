@@ -22,7 +22,7 @@ export const globalStyles = StyleSheet.create({
         padding: 20,
     },
     formErrorMessage: {
-        color: "#E3170A",
+        color: "#bf1650",
     },
     input: {
         height: 40,

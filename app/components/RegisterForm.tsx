@@ -1,18 +1,13 @@
-import React, { useState } from "react";
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    TextInput,
-    Keyboard,
-} from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { Alert, View, Text, TextInput, Keyboard } from "react-native";
 
-import { Formik } from "formik";
+import { useForm, ErrorMessage } from "react-hook-form";
 
-import ErrorMessage from "../components/ErrorMessage";
 import Button from "../components/forms/Button";
 
 import { globalStyles } from "../styles/global";
+
+import { validateEmail, validatePasswordConfirmation } from "../validations";
 
 import { Register } from "../api";
 
@@ -20,140 +15,144 @@ interface IProps {
     onRegister: Function;
 }
 
-export default function RegisterForm({ onRegister }: IProps) {
-    let passwordInput: TextInput;
-    let passwordConfirmInput: TextInput;
+type formData = {
+    email: string;
+    password: string;
+    confirmPassword: string;
+};
 
-    let [errorMessage, setErrorMessage] = useState("");
+const defaultValues = {
+    email: "",
+    password: "",
+    confirmPassword: "",
+};
+
+export default function RegisterForm({ onRegister }: IProps) {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const { errors, register, setValue, handleSubmit, watch } = useForm<
+        formData
+    >({
+        defaultValues,
+    });
+
+    const onSubmit = (data: formData) => {
+        setIsSubmitting(true);
+
+        Keyboard.dismiss();
+
+        Register(data.email, data.password)
+            .then(onSubmitSuccess)
+            .catch((error) => {
+                onSubmitFailed(error);
+            });
+    };
+
+    const onSubmitSuccess = (data: any) => {
+        setIsSubmitting(false);
+        onRegister(data["token"]);
+    };
+
+    const onSubmitFailed = (error: any) => {
+        setIsSubmitting(false);
+        Alert.alert(error.message);
+    };
+
+    const inputs = useRef<(TextInput | null)[]>([]);
+
+    useEffect(() => {
+        register(
+            { name: "email" },
+            {
+                required: "Email is mandatory",
+                validate: (value) => validateEmail(value) || true,
+            }
+        );
+        register(
+            { name: "password" },
+            { required: "Password is mandatory", min: 8 }
+        );
+        register(
+            { name: "confirmPassword" },
+            {
+                required: "Password confirmation is mandatory",
+                min: 8,
+                validate: (value) =>
+                    validatePasswordConfirmation(value, watch("password")) ||
+                    true,
+            }
+        );
+    }, [register]);
 
     return (
-        <View>
-            <Formik
-                initialValues={{
-                    email: "",
-                    password: "",
-                    confirmPassword: "",
-                }}
-                onSubmit={(values) => {
-                    Keyboard.dismiss();
+        <View style={globalStyles.formContainer}>
+            <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+                placeholder="Email"
+                placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                ref={(ref) => (inputs.current[0] = ref)}
+                returnKeyType="next"
+                onSubmitEditing={() => inputs.current[1]?.focus()}
+                style={[
+                    globalStyles.input,
+                    errors.email ? globalStyles.errorInput : {},
+                ]}
+                onChangeText={(text) => setValue("email", text, true)}
+            />
+            <ErrorMessage
+                style={globalStyles.formErrorMessage}
+                errors={errors}
+                name="email"
+                as={<Text />}
+            />
 
-                    Register(values.email, values.password)
-                        .then((response) => {
-                            if (response["token"] && response["token"] !== "") {
-                                onRegister(response["token"]);
-                            } else {
-                                if (response["message"]) {
-                                    for (let field in response["message"]) {
-                                        setErrorMessage(
-                                            response["message"]["email"]
-                                        );
-                                    }
-                                } else {
-                                    setErrorMessage(
-                                        "An error occured! Please try again!"
-                                    );
-                                }
-                            }
-                        })
-                        .catch((error) => {
-                            setErrorMessage(
-                                "An error occured! Please try again!"
-                            );
-                        });
-                }}
-                validate={(values) => {
-                    let errors: any = {};
+            <TextInput
+                placeholder="Password"
+                placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                returnKeyType="next"
+                onSubmitEditing={() => inputs.current[2]?.focus()}
+                ref={(ref) => (inputs.current[1] = ref)}
+                style={[
+                    globalStyles.input,
+                    errors.password ? globalStyles.errorInput : {},
+                ]}
+                secureTextEntry
+                onChangeText={(text) => setValue("password", text, true)}
+            />
+            <ErrorMessage
+                style={globalStyles.formErrorMessage}
+                errors={errors}
+                name="password"
+                as={<Text />}
+            />
 
-                    if (!values.email) {
-                        errors.email = "Email is required!";
-                    } else if (
-                        !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-                            values.email
-                        )
-                    ) {
-                        errors.email = "Email is not valid!";
-                    }
+            <TextInput
+                placeholder="Confirm Password"
+                placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                returnKeyType="go"
+                onSubmitEditing={handleSubmit(onSubmit)}
+                ref={(ref) => (inputs.current[2] = ref)}
+                style={[
+                    globalStyles.input,
+                    errors.confirmPassword ? globalStyles.errorInput : {},
+                ]}
+                secureTextEntry
+                onChangeText={(text) => setValue("confirmPassword", text, true)}
+            />
+            <ErrorMessage
+                style={globalStyles.formErrorMessage}
+                errors={errors}
+                name="confirmPassword"
+                as={<Text />}
+            />
 
-                    if (!values.password) {
-                        errors.password = "Password is required!";
-                    } else if (values.password !== values.confirmPassword) {
-                        errors.confirmPassword =
-                            "Password and Confirmation are not the same!";
-                    }
-
-                    return errors;
-                }}
-            >
-                {({ handleChange, handleSubmit, values, errors, touched }) => (
-                    <View style={globalStyles.formContainer}>
-                        <ErrorMessage message={errorMessage} />
-                        <TextInput
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="email-address"
-                            placeholder="Email"
-                            placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                            returnKeyType="next"
-                            onSubmitEditing={() => passwordInput.focus()}
-                            style={[
-                                globalStyles.input,
-                                errors.email && touched.email
-                                    ? globalStyles.errorInput
-                                    : {},
-                            ]}
-                            onChangeText={handleChange("email")}
-                            value={values.email}
-                        />
-                        {errors.email && touched.email && (
-                            <Text style={globalStyles.formErrorMessage}>
-                                {errors.email}
-                            </Text>
-                        )}
-                        <TextInput
-                            placeholder="Password"
-                            placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                            returnKeyType="next"
-                            onSubmitEditing={() => passwordConfirmInput.focus()}
-                            style={[
-                                globalStyles.input,
-                                errors.password && touched.password
-                                    ? globalStyles.errorInput
-                                    : {},
-                            ]}
-                            secureTextEntry
-                            onChangeText={handleChange("password")}
-                            value={values.password}
-                        />
-                        {errors.password && touched.password && (
-                            <Text style={globalStyles.formErrorMessage}>
-                                {errors.password}
-                            </Text>
-                        )}
-                        <TextInput
-                            placeholder="Confirm Password"
-                            placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                            ref={(input) => (passwordConfirmInput = input!)}
-                            returnKeyType="go"
-                            style={[
-                                globalStyles.input,
-                                errors.confirmPassword &&
-                                touched.confirmPassword
-                                    ? globalStyles.errorInput
-                                    : {},
-                            ]}
-                            secureTextEntry
-                            onChangeText={handleChange("confirmPassword")}
-                            value={values.confirmPassword}
-                        />
-                        {errors.confirmPassword && touched.confirmPassword && (
-                            <Text style={globalStyles.formErrorMessage}>
-                                {errors.confirmPassword}
-                            </Text>
-                        )}
-                        <Button onPress={handleSubmit} label="REGISTER" />
-                    </View>
-                )}
-            </Formik>
+            <Button
+                isSubmitting={isSubmitting}
+                onPress={handleSubmit(onSubmit)}
+                title="REGISTER"
+            />
         </View>
     );
 }

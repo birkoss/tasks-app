@@ -5,21 +5,21 @@ import { globalStyles } from "../../styles/global";
 
 interface IProps {
     onPress: Function;
-    label: string;
+    title: string;
     isSubmitting: boolean;
 }
 
-export default function Button({ onPress, label, isSubmitting }: IProps) {
+export default function Button({ onPress, title, isSubmitting }: IProps) {
     return (
         <TouchableOpacity
             style={globalStyles.buttonContainer}
-            onPress={() => onPress()}
+            onPress={onPress}
             disabled={isSubmitting}
         >
             {isSubmitting ? (
                 <ActivityIndicator size="small" color="#ffffff" />
             ) : (
-                <Text style={globalStyles.buttonText}>{label}</Text>
+                <Text style={globalStyles.buttonText}>{title}</Text>
             )}
         </TouchableOpacity>
     );

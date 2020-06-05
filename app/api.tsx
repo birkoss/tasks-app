@@ -26,7 +26,32 @@ function createRequest(endpoint: string, method: string, body: any) {
 export function Register(email: string, password: string) {
     let request = createRequest("register", "POST", { email, password });
 
-    //return fetch(req).then((response) => response.json());
+    return fetch(request)
+        .then((response) => response.json())
+        .then((data: any) => {
+            if (data["token"] && data["token"] !== "") {
+                return {
+                    token: data["token"],
+                };
+            }
+
+            /* Errors from the API */
+            if (data["message"]) {
+                for (let field in data["message"]) {
+                    throw new ApiError(data["message"][field].join(" "));
+                }
+            }
+
+            /* Generic error */
+            throw new ApiError("An error occurred please try again later.");
+        })
+        .catch((error) => {
+            if (error.name !== "ApiError") {
+                throw new Error("An error occurred please try again later.");
+            }
+
+            throw error;
+        });
 }
 
 export function Login(email: string, password: string) {
