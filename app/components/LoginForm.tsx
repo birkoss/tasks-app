@@ -1,18 +1,10 @@
 import React, { useState } from "react";
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    TextInput,
-    Keyboard,
-} from "react-native";
+import { View, Text, TextInput, Keyboard } from "react-native";
 
 import { Formik } from "formik";
 
 import ErrorMessage from "../components/ErrorMessage";
 import Button from "../components/forms/Button";
-import InputEmail from "../components/forms/InputEmail";
-import InputPassword from "../components/forms/InputPassword";
 
 import { globalStyles } from "../styles/global";
 
@@ -23,7 +15,7 @@ interface IProps {
 }
 
 export default function LoginForm({ onLogin }: IProps) {
-    let passwordInput: TextInput;
+    let passwordInputRef: TextInput;
 
     let [errorMessage, setErrorMessage] = useState("");
 
@@ -42,11 +34,15 @@ export default function LoginForm({ onLogin }: IProps) {
                     email: "",
                     password: "",
                 }}
-                onSubmit={(values) => {
+                onSubmit={(values, actions) => {
                     Keyboard.dismiss();
+
                     Login(values.email, values.password)
                         .then(loginSuccess)
-                        .catch(loginFailed);
+                        .catch((error) => {
+                            actions.setSubmitting(false);
+                            loginFailed(error);
+                        });
                 }}
                 validate={(values) => {
                     let errors: any = {};
@@ -68,25 +64,66 @@ export default function LoginForm({ onLogin }: IProps) {
                     return errors;
                 }}
             >
-                {({ handleChange, handleSubmit, values, errors, touched }) => (
+                {({
+                    handleChange,
+                    handleSubmit,
+                    values,
+                    errors,
+                    touched,
+                    isSubmitting,
+                }) => (
                     <View style={globalStyles.formContainer}>
                         <ErrorMessage message={errorMessage} />
 
-                        <InputEmail
-                            errorMessage={errors.email!}
-                            onChange={handleChange("email")}
+                        <TextInput
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="email-address"
+                            placeholder="Email"
+                            placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                            returnKeyType="next"
+                            onSubmitEditing={() => passwordInputRef.focus()}
+                            style={[
+                                globalStyles.input,
+                                errors.email && touched.email
+                                    ? globalStyles.errorInput
+                                    : {},
+                            ]}
+                            onChangeText={handleChange("email")}
                             value={values.email}
-                            isDirty={touched.email!}
                         />
-
-                        <InputPassword
-                            errorMessage={errors.password!}
-                            onChange={handleChange("password")}
+                        {errors.email && touched.email && (
+                            <Text style={globalStyles.formErrorMessage}>
+                                {errors.email}
+                            </Text>
+                        )}
+                        <TextInput
+                            placeholder="Password"
+                            placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                            returnKeyType="go"
+                            onSubmitEditing={handleSubmit}
+                            ref={(input) => (passwordInputRef = input!)}
+                            style={[
+                                globalStyles.input,
+                                errors.password && touched.password
+                                    ? globalStyles.errorInput
+                                    : {},
+                            ]}
+                            secureTextEntry
+                            onChangeText={handleChange("password")}
                             value={values.password}
-                            isDirty={touched.password!}
                         />
+                        {errors.password && touched.password && (
+                            <Text style={globalStyles.formErrorMessage}>
+                                {errors.password}
+                            </Text>
+                        )}
 
-                        <Button onPress={handleSubmit} label="LOGIN!" />
+                        <Button
+                            isSubmitting={isSubmitting}
+                            onPress={handleSubmit}
+                            label="LOGIN!"
+                        />
                     </View>
                 )}
             </Formik>

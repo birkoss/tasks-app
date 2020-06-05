@@ -1,4 +1,4 @@
-let url = "http://127.0.0.1:8000/api/";
+const url = "http://127.0.0.1:8000/api/";
 
 class ApiError extends Error {
     constructor(...params: any[]) {
@@ -9,9 +9,6 @@ class ApiError extends Error {
 
 function createRequest(endpoint: string, method: string, body: any) {
     method = method.toUpperCase();
-
-    url = "https://www.standish.ca/";
-    endpoint = "timeout.php";
 
     let headers = new Headers();
     //headers.append("Authorization", "Token XXXXXX");
