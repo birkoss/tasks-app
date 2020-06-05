@@ -4,11 +4,13 @@ import { StyleSheet, AsyncStorage } from "react-native";
 import Loading from "./app/screens/Loading";
 import Navigation from "./app/components/Navigation";
 
-import { AuthContext } from "./app/context";
+import { AuthContext, UserContext } from "./app/context";
+import { GetRewards } from "./app/api";
 
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [userToken, setUserToken] = useState("");
+    const [userRewards, setUserRewards] = useState(0);
 
     const authContext = useMemo(() => {
         return {
@@ -20,6 +22,15 @@ export default function App() {
             },
             logout: () => {
                 setUserToken("");
+            },
+        };
+    }, []);
+
+    const userContext = useMemo(() => {
+        return {
+            rewards: userRewards,
+            refreshRewards: async () => {
+                GetRewards(userToken);
             },
         };
     }, []);
@@ -38,6 +49,13 @@ export default function App() {
             const token = await AsyncStorage.getItem("token");
             if (token !== null) {
                 setUserToken(token);
+
+                GetRewards(token)
+                    .then((data) => {
+                        setUserRewards(data["rewards"]);
+                        console.log("New Rewards", data["rewards"]);
+                    })
+                    .catch((error) => console.log(error));
             }
             setIsLoading(false);
         } catch (error) {
@@ -55,7 +73,9 @@ export default function App() {
 
     return (
         <AuthContext.Provider value={authContext}>
-            <Navigation userToken={userToken} />
+            <UserContext.Provider value={userContext}>
+                <Navigation userToken={userToken} />
+            </UserContext.Provider>
         </AuthContext.Provider>
     );
 }

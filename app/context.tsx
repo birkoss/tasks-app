@@ -1,15 +1,14 @@
-import React, {
-    createContext,
-    Dispatch,
-    Reducer,
-    useContext,
-    useReducer,
-} from "react";
+import React from "react";
 
-interface IContextProps {
+interface AuthProps {
     logout: Function;
     login: Function;
     register: Function;
 }
+export const AuthContext = React.createContext({} as AuthProps);
 
-export const AuthContext = React.createContext({} as IContextProps);
+interface UserProps {
+    rewards: Number;
+    refreshRewards: Function;
+}
+export const UserContext = React.createContext({} as UserProps);

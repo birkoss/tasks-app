@@ -7,18 +7,27 @@ class ApiError extends Error {
     }
 }
 
-function createRequest(endpoint: string, method: string, body: any) {
+function createRequest(
+    endpoint: string,
+    method: string,
+    body: any = null,
+    token: string = ""
+) {
     method = method.toUpperCase();
 
     let headers = new Headers();
-    //headers.append("Authorization", "Token XXXXXX");
+    if (token !== "") {
+        headers.append("Authorization", "Token " + token);
+    }
     headers.append("Content-Type", "application/json");
 
     let request = new Request(url + endpoint, {
         headers,
         method,
-        body: JSON.stringify(body),
+        body: body !== null ? JSON.stringify(body) : null,
     });
+
+    console.log(request);
 
     return request;
 }
@@ -63,6 +72,34 @@ export function Login(email: string, password: string) {
             if (data["token"] && data["token"] !== "") {
                 return {
                     token: data["token"],
+                };
+            }
+
+            /* Errors from the API */
+            if (data["message"]) {
+                throw new ApiError(data["message"]);
+            }
+            /* Generic error */
+            throw new ApiError("An error occurred please try again later.");
+        })
+        .catch((error) => {
+            if (error.name !== "ApiError") {
+                throw new Error("An error occurred please try again later.");
+            }
+
+            throw error;
+        });
+}
+
+export function GetRewards(token: string) {
+    let request = createRequest("rewards", "GET", null, token);
+
+    return fetch(request)
+        .then((response) => response.json())
+        .then((data: any) => {
+            if (data["rewards"] && data["rewards"] !== "") {
+                return {
+                    rewards: data["rewards"],
                 };
             }
 
