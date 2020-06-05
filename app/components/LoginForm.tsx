@@ -10,6 +10,9 @@ import {
 import { Formik } from "formik";
 
 import ErrorMessage from "../components/ErrorMessage";
+import Button from "../components/forms/Button";
+import InputEmail from "../components/forms/InputEmail";
+import InputPassword from "../components/forms/InputPassword";
 
 import { globalStyles } from "../styles/global";
 
@@ -21,9 +24,16 @@ interface IProps {
 
 export default function LoginForm({ onLogin }: IProps) {
     let passwordInput: TextInput;
-    let passwordConfirmInput: TextInput;
 
     let [errorMessage, setErrorMessage] = useState("");
+
+    const loginSuccess = (data: any) => {
+        onLogin(data["token"]);
+    };
+
+    const loginFailed = (error: any) => {
+        setErrorMessage(error.message);
+    };
 
     return (
         <View>
@@ -31,30 +41,12 @@ export default function LoginForm({ onLogin }: IProps) {
                 initialValues={{
                     email: "",
                     password: "",
-                    confirmPassword: "",
                 }}
                 onSubmit={(values) => {
                     Keyboard.dismiss();
-
                     Login(values.email, values.password)
-                        .then((response) => {
-                            if (response["token"] && response["token"] !== "") {
-                                onLogin(response["token"]);
-                            } else {
-                                if (response["message"]) {
-                                    setErrorMessage(response["message"]);
-                                } else {
-                                    setErrorMessage(
-                                        "An error occured! Please try again!"
-                                    );
-                                }
-                            }
-                        })
-                        .catch((error) => {
-                            setErrorMessage(
-                                "An error occured! Please try again!"
-                            );
-                        });
+                        .then(loginSuccess)
+                        .catch(loginFailed);
                 }}
                 validate={(values) => {
                     let errors: any = {};
@@ -79,53 +71,22 @@ export default function LoginForm({ onLogin }: IProps) {
                 {({ handleChange, handleSubmit, values, errors, touched }) => (
                     <View style={globalStyles.formContainer}>
                         <ErrorMessage message={errorMessage} />
-                        <TextInput
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="email-address"
-                            placeholder="Email"
-                            placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                            returnKeyType="next"
-                            onSubmitEditing={() => passwordInput.focus()}
-                            style={[
-                                globalStyles.input,
-                                errors.email && touched.email
-                                    ? globalStyles.errorInput
-                                    : {},
-                            ]}
-                            onChangeText={handleChange("email")}
+
+                        <InputEmail
+                            errorMessage={errors.email!}
+                            onChange={handleChange("email")}
                             value={values.email}
+                            isDirty={touched.email!}
                         />
-                        {errors.email && touched.email && (
-                            <Text style={globalStyles.formErrorMessage}>
-                                {errors.email}
-                            </Text>
-                        )}
-                        <TextInput
-                            placeholder="Password"
-                            placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                            returnKeyType="go"
-                            style={[
-                                globalStyles.input,
-                                errors.password && touched.password
-                                    ? globalStyles.errorInput
-                                    : {},
-                            ]}
-                            secureTextEntry
-                            onChangeText={handleChange("password")}
+
+                        <InputPassword
+                            errorMessage={errors.password!}
+                            onChange={handleChange("password")}
                             value={values.password}
+                            isDirty={touched.password!}
                         />
-                        {errors.password && touched.password && (
-                            <Text style={globalStyles.formErrorMessage}>
-                                {errors.password}
-                            </Text>
-                        )}
-                        <TouchableOpacity
-                            style={globalStyles.buttonContainer}
-                            onPress={handleSubmit}
-                        >
-                            <Text style={globalStyles.buttonText}>LOGIN</Text>
-                        </TouchableOpacity>
+
+                        <Button onPress={handleSubmit} label="LOGIN!" />
                     </View>
                 )}
             </Formik>

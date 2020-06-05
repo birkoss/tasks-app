@@ -10,6 +10,7 @@ import {
 import { Formik } from "formik";
 
 import ErrorMessage from "../components/ErrorMessage";
+import Button from "../components/forms/Button";
 
 import { globalStyles } from "../styles/global";
 
@@ -149,14 +150,7 @@ export default function RegisterForm({ onRegister }: IProps) {
                                 {errors.confirmPassword}
                             </Text>
                         )}
-                        <TouchableOpacity
-                            style={globalStyles.buttonContainer}
-                            onPress={handleSubmit}
-                        >
-                            <Text style={globalStyles.buttonText}>
-                                REGISTER
-                            </Text>
-                        </TouchableOpacity>
+                        <Button onPress={handleSubmit} label="REGISTER" />
                     </View>
                 )}
             </Formik>
