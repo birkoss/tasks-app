@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import {
-    StyleSheet,
     View,
     Image,
     KeyboardAvoidingView,
@@ -17,6 +16,8 @@ import { LoginScreenNavigationProp } from "../types";
 
 import { AuthContext } from "../context";
 
+import { fullStyles } from "../styles/full";
+
 type Props = {
     navigation: LoginScreenNavigationProp;
 };
@@ -29,22 +30,25 @@ export default function Login({ navigation }: Props) {
                 Keyboard.dismiss();
             }}
         >
-            <KeyboardAvoidingView behavior="padding" style={styles.container}>
-                <View style={styles.logoContainer}>
+            <KeyboardAvoidingView
+                behavior="padding"
+                style={fullStyles.container}
+            >
+                <View style={fullStyles.logoContainer}>
                     <Image
-                        style={styles.logo}
+                        style={fullStyles.logo}
                         source={require("../assets/icon.png")}
                     />
                 </View>
-                <View>
-                    <LoginForm onLogin={login} />
-                </View>
-                <View style={styles.linkContainer}>
+
+                <LoginForm onLogin={login} />
+
+                <View style={fullStyles.linkContainer}>
                     <TouchableOpacity
                         onPress={() => navigation.navigate("Register")}
                     >
-                        <Text style={styles.link}>
-                            New here? Create an account!
+                        <Text style={fullStyles.link}>
+                            New here? Create an account
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -52,26 +56,3 @@ export default function Login({ navigation }: Props) {
         </TouchableWithoutFeedback>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#3498db",
-    },
-    link: {
-        color: "#ffffff",
-    },
-    linkContainer: {
-        alignSelf: "center",
-        marginBottom: 20,
-    },
-    logoContainer: {
-        alignItems: "center",
-        justifyContent: "center",
-        flexGrow: 1,
-    },
-    logo: {
-        width: 100,
-        height: 100,
-    },
-});

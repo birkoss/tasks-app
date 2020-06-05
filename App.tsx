@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, AsyncStorage } from "react-native";
 
-import Splash from "./app/screens/Splash";
+import Loading from "./app/screens/Loading";
 import Navigation from "./app/components/Navigation";
 
 import { AuthContext } from "./app/context";
@@ -13,29 +13,44 @@ export default function App() {
     const authContext = useMemo(() => {
         return {
             login: (token: string = "") => {
-                setUserToken(token);
-                setIsLoading(false);
+                storeToken(token);
             },
             register: (token: string = "") => {
-                setUserToken(token);
-                setIsLoading(false);
+                storeToken(token);
             },
             logout: () => {
                 setUserToken("");
-                setIsLoading(false);
             },
         };
     }, []);
 
-    useEffect(() => {
-        setTimeout(() => {
+    const storeToken = async (token: string) => {
+        setUserToken(token);
+        try {
+            await AsyncStorage.setItem("token", token);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getToken = async () => {
+        try {
+            const token = await AsyncStorage.getItem("token");
+            if (token !== null) {
+                setUserToken(token);
+            }
             setIsLoading(false);
-            // set user
-        }, 1000);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        getToken();
     }, []);
 
     if (isLoading) {
-        return <Splash />;
+        return <Loading />;
     }
 
     return (

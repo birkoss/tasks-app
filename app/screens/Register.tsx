@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import {
-    StyleSheet,
     View,
     Text,
     Image,
@@ -16,6 +15,8 @@ import { AuthContext } from "../context";
 
 import { RegisterScreenNavigationProp } from "../types";
 
+import { fullStyles } from "../styles/full";
+
 type Props = {
     navigation: RegisterScreenNavigationProp;
 };
@@ -29,21 +30,24 @@ export default function Register({ navigation }: Props) {
                 Keyboard.dismiss();
             }}
         >
-            <KeyboardAvoidingView behavior="padding" style={styles.container}>
-                <View style={styles.logoContainer}>
+            <KeyboardAvoidingView
+                behavior="padding"
+                style={fullStyles.container}
+            >
+                <View style={fullStyles.logoContainer}>
                     <Image
-                        style={styles.logo}
+                        style={fullStyles.logo}
                         source={require("../assets/icon.png")}
                     />
                 </View>
 
                 <RegisterForm onRegister={register} />
 
-                <View style={styles.linkContainer}>
+                <View style={fullStyles.linkContainer}>
                     <TouchableOpacity
                         onPress={() => navigation.navigate("Login")}
                     >
-                        <Text style={styles.link}>
+                        <Text style={fullStyles.link}>
                             Already have an account ? Log in
                         </Text>
                     </TouchableOpacity>
@@ -52,26 +56,3 @@ export default function Register({ navigation }: Props) {
         </TouchableWithoutFeedback>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#3498db",
-    },
-    link: {
-        color: "#ffffff",
-    },
-    linkContainer: {
-        alignSelf: "center",
-        marginBottom: 20,
-    },
-    logoContainer: {
-        alignItems: "center",
-        justifyContent: "center",
-        flexGrow: 1,
-    },
-    logo: {
-        width: 100,
-        height: 100,
-    },
-});
