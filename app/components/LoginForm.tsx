@@ -1,5 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Alert, View, Text, TextInput, Keyboard } from "react-native";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import {
+    Alert,
+    View,
+    Text,
+    TextInput,
+    Keyboard,
+    DatePickerAndroid,
+} from "react-native";
 
 import { useForm, ErrorMessage } from "react-hook-form";
 
@@ -9,11 +16,9 @@ import { globalStyles } from "../styles/global";
 
 import { validateEmail } from "../validations";
 
-import { Login } from "../api";
+import { AuthContext } from "../context";
 
-interface IProps {
-    onLogin: Function;
-}
+import { Login } from "../api";
 
 type formData = {
     email: string;
@@ -25,8 +30,9 @@ const defaultValues = {
     password: "",
 };
 
-export default function LoginForm({ onLogin }: IProps) {
+export default function LoginForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { dispatch } = useContext(AuthContext);
 
     const { errors, register, setValue, handleSubmit } = useForm<formData>({
         defaultValues,
@@ -46,7 +52,12 @@ export default function LoginForm({ onLogin }: IProps) {
 
     const onSubmitSuccess = (data: any) => {
         setIsSubmitting(false);
-        onLogin(data["token"]);
+        dispatch({
+            type: "LOGIN",
+            payload: {
+                token: data["token"],
+            },
+        });
     };
 
     const onSubmitFailed = (error: any) => {

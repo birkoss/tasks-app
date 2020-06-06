@@ -11,8 +11,6 @@ import {
 import RegisterForm from "../components/RegisterForm";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { AuthContext } from "../context";
-
 import { RegisterScreenNavigationProp } from "../types";
 
 import { fullStyles } from "../styles/full";
@@ -22,8 +20,6 @@ type Props = {
 };
 
 export default function Register({ navigation }: Props) {
-    const { register } = useContext(AuthContext);
-
     return (
         <TouchableWithoutFeedback
             onPress={() => {
@@ -41,7 +37,7 @@ export default function Register({ navigation }: Props) {
                     />
                 </View>
 
-                <RegisterForm onRegister={register} />
+                <RegisterForm />
 
                 <View style={fullStyles.linkContainer}>
                     <TouchableOpacity

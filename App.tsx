@@ -4,13 +4,22 @@ import { StyleSheet, AsyncStorage } from "react-native";
 import Loading from "./app/screens/Loading";
 import Navigation from "./app/components/Navigation";
 
-import { AuthContext, UserContext } from "./app/context";
+import {
+    AuthContext,
+    AuthContextReducer,
+    AuthContextInitialValues,
+} from "./app/context";
+
 import { GetRewards } from "./app/api";
 
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [userToken, setUserToken] = useState("");
-    const [userRewards, setUserRewards] = useState(0);
+
+    const [state, dispatch] = React.useReducer(
+        AuthContextReducer,
+        AuthContextInitialValues
+    );
 
     const authContext = useMemo(() => {
         return {
@@ -22,15 +31,6 @@ export default function App() {
             },
             logout: () => {
                 setUserToken("");
-            },
-        };
-    }, []);
-
-    const userContext = useMemo(() => {
-        return {
-            rewards: userRewards,
-            refreshRewards: async () => {
-                GetRewards(userToken);
             },
         };
     }, []);
@@ -52,7 +52,12 @@ export default function App() {
 
                 GetRewards(token)
                     .then((data) => {
-                        setUserRewards(data["rewards"]);
+                        dispatch({
+                            type: "REWARDS",
+                            payload: {
+                                rewards: data["rewards"],
+                            },
+                        });
                         console.log("New Rewards", data["rewards"]);
                     })
                     .catch((error) => console.log(error));
@@ -72,10 +77,8 @@ export default function App() {
     }
 
     return (
-        <AuthContext.Provider value={authContext}>
-            <UserContext.Provider value={userContext}>
-                <Navigation userToken={userToken} />
-            </UserContext.Provider>
+        <AuthContext.Provider value={{ state, dispatch }}>
+            <Navigation />
         </AuthContext.Provider>
     );
 }

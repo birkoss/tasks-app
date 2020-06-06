@@ -14,8 +14,6 @@ import LoginForm from "../components/LoginForm";
 
 import { LoginScreenNavigationProp } from "../types";
 
-import { AuthContext } from "../context";
-
 import { fullStyles } from "../styles/full";
 
 type Props = {
@@ -23,7 +21,6 @@ type Props = {
 };
 
 export default function Login({ navigation }: Props) {
-    const { login } = useContext(AuthContext);
     return (
         <TouchableWithoutFeedback
             onPress={() => {
@@ -41,7 +38,7 @@ export default function Login({ navigation }: Props) {
                     />
                 </View>
 
-                <LoginForm onLogin={login} />
+                <LoginForm />
 
                 <View style={fullStyles.linkContainer}>
                     <TouchableOpacity

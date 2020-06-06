@@ -16,7 +16,7 @@ type Props = {
 };
 
 function Home({ navigation }: Props) {
-    const { logout } = useContext(AuthContext);
+    const { dispatch } = useContext(AuthContext);
 
     return (
         <View style={styles.background}>
@@ -27,7 +27,13 @@ function Home({ navigation }: Props) {
                 >
                     <Text>Home</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => logout()}>
+                <TouchableOpacity
+                    onPress={() =>
+                        dispatch({
+                            type: "LOGOUT",
+                        })
+                    }
+                >
                     <Text>Logout</Text>
                 </TouchableOpacity>
             </View>

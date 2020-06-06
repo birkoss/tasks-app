@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Alert, View, Text, TextInput, Keyboard } from "react-native";
 
 import { useForm, ErrorMessage } from "react-hook-form";
@@ -10,10 +10,7 @@ import { globalStyles } from "../styles/global";
 import { validateEmail, validatePasswordConfirmation } from "../validations";
 
 import { Register } from "../api";
-
-interface IProps {
-    onRegister: Function;
-}
+import { AuthContext } from "../context";
 
 type formData = {
     email: string;
@@ -27,7 +24,9 @@ const defaultValues = {
     confirmPassword: "",
 };
 
-export default function RegisterForm({ onRegister }: IProps) {
+export default function RegisterForm() {
+    const { dispatch } = useContext(AuthContext);
+
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { errors, register, setValue, handleSubmit, watch } = useForm<
@@ -50,7 +49,12 @@ export default function RegisterForm({ onRegister }: IProps) {
 
     const onSubmitSuccess = (data: any) => {
         setIsSubmitting(false);
-        onRegister(data["token"]);
+        dispatch({
+            type: "LOGIN",
+            payload: {
+                token: data["token"],
+            },
+        });
     };
 
     const onSubmitFailed = (error: any) => {

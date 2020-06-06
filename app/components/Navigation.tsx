@@ -15,13 +15,13 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import { AuthStackParamList, HomeStackParamList } from "../types";
 import { Text } from "react-native";
 
-import { UserContext } from "../context";
+import { AuthContext } from "../context";
 
 const AuthStack = createStackNavigator<AuthStackParamList>();
 
 const HomeStack = createStackNavigator<HomeStackParamList>();
 const HomeStackScreen = () => {
-    const { rewards } = useContext(UserContext);
+    const { state } = React.useContext(AuthContext);
 
     return (
         <HomeStack.Navigator
@@ -53,7 +53,7 @@ const HomeStackScreen = () => {
                                 color: "#ffffff",
                             }}
                         >
-                            {rewards} $
+                            {state.rewards} $
                         </Text>
                     ),
                 };
@@ -119,14 +119,11 @@ const TabsScreen = () => (
 
 const Drawer = createDrawerNavigator();
 
-type Props = {
-    userToken: string;
-};
-
-export default function Navigation({ userToken }: Props) {
+export default function Navigation() {
+    const { state } = useContext(AuthContext);
     return (
         <NavigationContainer>
-            {userToken ? (
+            {state.isAuthenticated ? (
                 <Drawer.Navigator>
                     <Drawer.Screen
                         name="Home"
