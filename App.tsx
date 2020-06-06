@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { StyleSheet, AsyncStorage } from "react-native";
+import React, { useState, useEffect } from "react";
+import { AsyncStorage } from "react-native";
 
 import Loading from "./app/screens/Loading";
 import Navigation from "./app/components/Navigation";
@@ -39,7 +39,6 @@ export default function App() {
                                 rewards: data["rewards"],
                             },
                         });
-                        console.log("New Rewards", data["rewards"]);
                     })
                     .catch((error) => console.log(error));
             }

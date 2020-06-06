@@ -4,12 +4,13 @@ import { ActivityIndicator, TouchableOpacity, Text } from "react-native";
 import { globalStyles } from "../../styles/global";
 
 interface IProps {
-    onPress: Function;
+    onPress: any;
     title: string;
     isSubmitting: boolean;
 }
 
 export default function Button({ onPress, title, isSubmitting }: IProps) {
+    console.log(onPress);
     return (
         <TouchableOpacity
             style={globalStyles.buttonContainer}

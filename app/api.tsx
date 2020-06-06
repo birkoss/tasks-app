@@ -27,8 +27,6 @@ function createRequest(
         body: body !== null ? JSON.stringify(body) : null,
     });
 
-    console.log(request);
-
     return request;
 }
 
