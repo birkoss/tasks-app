@@ -18,7 +18,6 @@ import {
     HomeStackParamList,
     TasksStackParamList,
 } from "../types";
-import { Text } from "react-native";
 
 import { AuthContext } from "../context";
 
@@ -26,44 +25,8 @@ const AuthStack = createStackNavigator<AuthStackParamList>();
 
 const HomeStack = createStackNavigator<HomeStackParamList>();
 const HomeStackScreen = () => {
-    const { state } = React.useContext(AuthContext);
-
     return (
-        <HomeStack.Navigator
-            screenOptions={({ navigation }) => {
-                return {
-                    headerStyle: { backgroundColor: "#3498db" },
-                    headerTitleStyle: { color: "#ffffff" },
-
-                    headerBackTitleStyle: { color: "#ffffff" },
-                    headerTintColor: "#ffffff",
-
-                    headerLeft: ({ onPress }) => (
-                        <React.Fragment>
-                            <Ionicons
-                                name="ios-menu"
-                                size={30}
-                                style={{ marginLeft: 20 }}
-                                color="white"
-                                onPress={() => navigation.toggleDrawer()}
-                            />
-                        </React.Fragment>
-                    ),
-
-                    headerRight: ({}) => (
-                        <Text
-                            style={{
-                                marginRight: 20,
-                                fontWeight: "bold",
-                                color: "#ffffff",
-                            }}
-                        >
-                            {state.rewards} $
-                        </Text>
-                    ),
-                };
-            }}
-        >
+        <HomeStack.Navigator>
             <HomeStack.Screen name="Home" component={Home} />
             <HomeStack.Screen name="Details" component={Home} />
         </HomeStack.Navigator>

@@ -17,14 +17,25 @@ type Props = {
 };
 
 function Home({ navigation }: Props) {
-    const { dispatch } = useContext(AuthContext);
+    const { state, dispatch } = useContext(AuthContext);
 
     useEffect(() => {
-        navigation.setOptions(
-            navigationDrawerScreenOptions("Mes taches", () =>
+        navigation.setOptions({
+            ...navigationDrawerScreenOptions("Mes taches", () =>
                 navigation.toggleDrawer()
-            )
-        );
+            ),
+            headerRight: ({}) => (
+                <Text
+                    style={{
+                        marginRight: 20,
+                        fontWeight: "bold",
+                        color: "#ffffff",
+                    }}
+                >
+                    {state.rewards} $
+                </Text>
+            ),
+        });
     }, []);
 
     return (
