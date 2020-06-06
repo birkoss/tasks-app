@@ -10,15 +10,15 @@ import {
 
 import { useForm, ErrorMessage } from "react-hook-form";
 
-import Button from "../components/forms/Button";
+import Button from "./Button";
 
-import { globalStyles } from "../styles/global";
+import { globalStyles } from "../../styles/global";
 
-import { validateEmail } from "../validations";
+import { validateEmail } from "../../validations";
 
-import { AuthContext } from "../context";
+import { AuthContext } from "../../context";
 
-import { Login } from "../api";
+import { Login } from "../../api";
 
 type formData = {
     email: string;

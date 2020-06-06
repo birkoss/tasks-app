@@ -3,14 +3,14 @@ import { Alert, View, Text, TextInput, Keyboard } from "react-native";
 
 import { useForm, ErrorMessage } from "react-hook-form";
 
-import Button from "../components/forms/Button";
+import Button from "./Button";
 
-import { globalStyles } from "../styles/global";
+import { globalStyles } from "../../styles/global";
 
-import { validateEmail, validatePasswordConfirmation } from "../validations";
+import { validateEmail, validatePasswordConfirmation } from "../../validations";
 
-import { Register } from "../api";
-import { AuthContext } from "../context";
+import { Register } from "../../api";
+import { AuthContext } from "../../context";
 
 type formData = {
     email: string;
