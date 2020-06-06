@@ -8,7 +8,7 @@ import {
     TouchableWithoutFeedback,
 } from "react-native";
 
-import RegisterForm from "../components/RegisterForm";
+import RegisterForm from "../components/forms/RegisterForm";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { RegisterScreenNavigationProp } from "../types";

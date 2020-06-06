@@ -10,7 +10,7 @@ import {
 
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../components/forms/LoginForm";
 
 import { LoginScreenNavigationProp } from "../types";
 

@@ -11,8 +11,13 @@ import Login from "../screens/Login";
 import Register from "../screens/Register";
 import Home from "../screens/Home";
 import WelcomeScreen from "../screens/WelcomeScreen";
+import TasksScreen from "../screens/TasksScreen";
 
-import { AuthStackParamList, HomeStackParamList } from "../types";
+import {
+    AuthStackParamList,
+    HomeStackParamList,
+    TasksStackParamList,
+} from "../types";
 import { Text } from "react-native";
 
 import { AuthContext } from "../context";
@@ -65,10 +70,10 @@ const HomeStackScreen = () => {
     );
 };
 
-const TasksStack = createStackNavigator();
+const TasksStack = createStackNavigator<TasksStackParamList>();
 const TasksStackScreen = () => (
     <TasksStack.Navigator>
-        <TasksStack.Screen name="Tasks" component={WelcomeScreen} />
+        <TasksStack.Screen name="Tasks" component={TasksScreen} />
         <TasksStack.Screen name="Details" component={Register} />
     </TasksStack.Navigator>
 );
