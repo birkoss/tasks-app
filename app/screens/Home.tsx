@@ -1,11 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import {
-    View,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    StatusBar,
-} from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import { AuthContext } from "../context";
 
@@ -40,7 +34,6 @@ function Home({ navigation }: Props) {
 
     return (
         <View style={styles.background}>
-            <StatusBar barStyle="light-content" />
             <View style={styles.logoContainer}>
                 <TouchableOpacity
                     onPress={() => navigation.push("Details", { taskID: 10 })}

@@ -7,6 +7,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
+import { SideMenu } from "./SideMenu";
+
 import Login from "../screens/Login";
 import Register from "../screens/Register";
 import Home from "../screens/Home";
@@ -89,10 +91,13 @@ const Drawer = createDrawerNavigator();
 
 export default function Navigation() {
     const { state } = useContext(AuthContext);
+
     return (
         <NavigationContainer>
             {state.isAuthenticated ? (
-                <Drawer.Navigator>
+                <Drawer.Navigator
+                    drawerContent={(props) => <SideMenu {...props} />}
+                >
                     <Drawer.Screen
                         name="Home"
                         component={TabsScreen}

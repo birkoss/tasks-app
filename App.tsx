@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, StatusBar } from "react-native";
 
 import Loading from "./app/screens/Loading";
 import Navigation from "./app/components/Navigation";
@@ -51,6 +51,8 @@ export default function App() {
     useEffect(() => {
         getToken();
     }, []);
+
+    StatusBar.setBarStyle("light-content");
 
     if (isLoading) {
         return <Loading />;

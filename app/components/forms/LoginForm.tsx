@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import {
-    Alert,
-    View,
-    Text,
-    TextInput,
-    Keyboard,
-    DatePickerAndroid,
-} from "react-native";
+import { Alert, View, Text, TextInput, Keyboard } from "react-native";
 
 import { useForm, ErrorMessage } from "react-hook-form";
 
