@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
     View,
     StyleSheet,
@@ -10,6 +10,7 @@ import {
 import { AuthContext } from "../context";
 
 import { HomeScreenNavigationProp } from "../types";
+import { navigationDrawerScreenOptions } from "../styles/navigation";
 
 type Props = {
     navigation: HomeScreenNavigationProp;
@@ -17,6 +18,14 @@ type Props = {
 
 function Home({ navigation }: Props) {
     const { dispatch } = useContext(AuthContext);
+
+    useEffect(() => {
+        navigation.setOptions(
+            navigationDrawerScreenOptions("Mes taches", () =>
+                navigation.toggleDrawer()
+            )
+        );
+    }, []);
 
     return (
         <View style={styles.background}>
