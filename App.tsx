@@ -14,41 +14,22 @@ import { GetRewards } from "./app/api";
 
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);
-    const [userToken, setUserToken] = useState("");
 
     const [state, dispatch] = React.useReducer(
         AuthContextReducer,
         AuthContextInitialValues
     );
 
-    const authContext = useMemo(() => {
-        return {
-            login: (token: string = "") => {
-                storeToken(token);
-            },
-            register: (token: string = "") => {
-                storeToken(token);
-            },
-            logout: () => {
-                setUserToken("");
-            },
-        };
-    }, []);
-
-    const storeToken = async (token: string) => {
-        setUserToken(token);
-        try {
-            await AsyncStorage.setItem("token", token);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     const getToken = async () => {
         try {
             const token = await AsyncStorage.getItem("token");
             if (token !== null) {
-                setUserToken(token);
+                dispatch({
+                    type: "LOGIN",
+                    payload: {
+                        token,
+                    },
+                });
 
                 GetRewards(token)
                     .then((data) => {
