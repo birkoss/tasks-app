@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 
 import { Ionicons } from "@expo/vector-icons";
 
+import { IconWithBadge } from "../components/IconWithBadge";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -79,8 +81,13 @@ const TabsScreen = () => (
             component={TasksStackScreen}
             options={{
                 tabBarLabel: "All Tasks",
-                tabBarIcon: ({ focused, color, size }) => (
-                    <Ionicons name="ios-list" size={size} color={color} />
+                tabBarIcon: ({ color, size }) => (
+                    <IconWithBadge
+                        name="ios-list"
+                        size={size}
+                        color={color}
+                        badgeCount={3}
+                    />
                 ),
             }}
         />
