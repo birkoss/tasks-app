@@ -13,18 +13,18 @@ type Props = {
 
 export function IconWithBadge({ name, badgeCount, color, size }: Props) {
     return (
-        <View style={{ width: 24, height: 24, margin: 5 }}>
+        <View>
             <Ionicons name={name} size={size} color={color} />
             {badgeCount > 0 && (
                 <View
                     style={{
                         position: "absolute",
-                        right: -6,
+                        right: -12,
                         top: -3,
                         backgroundColor: "red",
                         borderRadius: 6,
-                        width: 12,
-                        height: 12,
+                        width: 18,
+                        height: 18,
                         justifyContent: "center",
                         alignItems: "center",
                     }}
