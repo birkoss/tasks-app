@@ -15,7 +15,7 @@ import {
 
 import { Task } from "../types";
 import { AuthContext } from "../context";
-import { DeleteTask } from "../api";
+import { DeleteTask, UserSelectTask } from "../api";
 import { globalStyles } from "../styles/global";
 
 type Props = {
@@ -31,6 +31,12 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
         DeleteTask(state.token, taskID)
             .then((data) => onRefresh())
             .catch((error) => Alert.alert(error));
+    };
+
+    const selectTask = (taskID: number) => {
+        UserSelectTask(state.token, taskID)
+            .then((data) => onRefresh())
+            .catch((error) => Alert.alert(error.message));
     };
 
     const askConfirmation = (taskID: number) => {
@@ -91,7 +97,10 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                     <CardItem footer bordered>
                         <Left>
                             {state.isChildren && (
-                                <Button transparent>
+                                <Button
+                                    transparent
+                                    onPress={() => selectTask(task.id)}
+                                >
                                     <Icon
                                         style={styles.action}
                                         active

@@ -61,7 +61,7 @@ export interface Group {
 }
 
 export interface Task {
-    id: string;
+    id: number;
     name: string;
     reward: number;
     description: string;

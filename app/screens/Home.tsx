@@ -15,7 +15,7 @@ function Home({ navigation }: Props) {
 
     useEffect(() => {
         navigation.setOptions({
-            ...navigationDrawerScreenOptions("Mes taches", () =>
+            ...navigationDrawerScreenOptions("My tasks", () =>
                 navigation.toggleDrawer()
             ),
             headerRight: ({}) => (
