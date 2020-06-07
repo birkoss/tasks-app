@@ -5,11 +5,12 @@ import { Container, Content, Button, Icon } from "native-base";
 import { TasksScreenNavigationProp } from "../../types";
 import { navigationDrawerScreenOptions } from "../../styles/navigation";
 
-import { GetTasks } from "../../api";
+import { GetTasks, AddTask } from "../../api";
 
 import { Tasks } from "../../components/Tasks";
 import { Task } from "../../types";
 import { AuthContext } from "../../context";
+import { globalStyles } from "../../styles/global";
 
 type Props = {
     navigation: TasksScreenNavigationProp;
@@ -32,6 +33,10 @@ const TaskListScreen = ({ navigation }: Props) => {
             .catch((error) => console.log("error", error));
     };
 
+    const addTask = () => {
+        navigation.push("Add");
+    };
+
     useEffect(() => {
         navigation.setOptions({
             ...navigationDrawerScreenOptions("Tasks", () =>
@@ -45,7 +50,7 @@ const TaskListScreen = ({ navigation }: Props) => {
                     <Button
                         transparent
                         onPress={() => {
-                            navigation.push("Add");
+                            addTask();
                         }}
                     >
                         <Icon
@@ -68,8 +73,8 @@ const TaskListScreen = ({ navigation }: Props) => {
 
     return (
         <Container>
-            <Content>
-                <Tasks tasks={tasks} onRefresh={getTasks} />
+            <Content contentContainerStyle={{ flexGrow: 1 }}>
+                <Tasks tasks={tasks} onRefresh={getTasks} onAdd={addTask} />
             </Content>
         </Container>
     );

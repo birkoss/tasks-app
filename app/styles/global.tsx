@@ -15,6 +15,19 @@ export const globalStyles = StyleSheet.create({
         color: "#ffffff",
         fontWeight: "700",
     },
+    debugContainer: {
+        borderColor: "#ff00ff",
+        borderWidth: 10,
+    },
+    emptyContainer: {
+        flex: 1,
+        flexGrow: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    emptyText: {
+        color: "#cccccc",
+    },
     errorInput: {
         backgroundColor: "rgba(255, 0, 0, 0.4)",
     },
@@ -37,5 +50,8 @@ export const globalStyles = StyleSheet.create({
         marginTop: 10,
         color: "#2980b9",
         paddingHorizontal: 10,
+    },
+    link: {
+        color: "#2980b9",
     },
 });

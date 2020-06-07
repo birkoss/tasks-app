@@ -16,13 +16,15 @@ import {
 import { Task } from "../types";
 import { AuthContext } from "../context";
 import { DeleteTask } from "../api";
+import { globalStyles } from "../styles/global";
 
 type Props = {
     tasks: Task[];
     onRefresh: Function;
+    onAdd: Function;
 };
 
-export function Tasks({ tasks, onRefresh }: Props) {
+export function Tasks({ tasks, onRefresh, onAdd }: Props) {
     const { state } = useContext(AuthContext);
 
     const deleteTask = (taskID: number) => {
@@ -46,6 +48,21 @@ export function Tasks({ tasks, onRefresh }: Props) {
             { cancelable: false }
         );
     };
+
+    if (tasks.length === 0) {
+        return (
+            <View style={globalStyles.emptyContainer}>
+                <Text style={globalStyles.emptyText}>
+                    No task at the moment.
+                </Text>
+                {!state.isChildren && (
+                    <Button transparent onPress={() => onAdd()}>
+                        <Text style={globalStyles.link}>Add a new task</Text>
+                    </Button>
+                )}
+            </View>
+        );
+    }
 
     return (
         <React.Fragment>
