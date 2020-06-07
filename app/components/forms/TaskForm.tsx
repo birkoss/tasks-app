@@ -17,19 +17,19 @@ type Props = {
 };
 
 type formData = {
-    email: string;
-    password: string;
-    firstname: string;
+    name: string;
+    description: string;
+    reward: number;
 };
 
 const defaultValues = {
-    email: "",
-    password: "",
-    firstname: "",
+    name: "",
+    description: "",
+    reward: 0,
 };
 
 export default function TaskForm({ onAdded }: Props) {
-    const { state, dispatch } = useContext(AuthContext);
+    const { state } = useContext(AuthContext);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -63,20 +63,16 @@ export default function TaskForm({ onAdded }: Props) {
 
     useEffect(() => {
         register(
-            { name: "email" },
+            { name: "name" },
             {
-                required: "Email is mandatory",
-                validate: (value) => validateEmail(value) || true,
+                required: "Name is mandatory",
             }
         );
+        register({ name: "reward" }, { required: "Reward is mandatory" });
         register(
-            { name: "password" },
-            { required: "Password is mandatory", min: 8 }
-        );
-        register(
-            { name: "firstname" },
+            { name: "description" },
             {
-                required: "Firstname is mandatory",
+                required: "Description is mandatory",
                 min: 8,
             }
         );
@@ -87,62 +83,64 @@ export default function TaskForm({ onAdded }: Props) {
             <TextInput
                 autoCapitalize="none"
                 autoCorrect={false}
-                keyboardType="email-address"
-                placeholder="Email"
+                placeholder="Name"
                 placeholderTextColor="rgba(41, 128, 185, 0.7)"
                 ref={(ref) => (inputs.current[0] = ref)}
                 returnKeyType="next"
                 onSubmitEditing={() => inputs.current[1]?.focus()}
                 style={[
                     globalStyles.inputDark,
-                    errors.email ? globalStyles.errorInput : {},
+                    errors.name ? globalStyles.errorInput : {},
                 ]}
-                onChangeText={(text) => setValue("email", text, true)}
+                onChangeText={(text) => setValue("name", text, true)}
             />
             <ErrorMessage
                 style={globalStyles.formErrorMessage}
                 errors={errors}
-                name="email"
+                name="name"
                 as={<Text />}
             />
 
             <TextInput
                 autoCorrect={false}
-                placeholder="Firstname"
+                placeholder="Reward ($)"
+                keyboardType="numeric"
                 placeholderTextColor="rgba(41, 128, 185, 0.7)"
                 ref={(ref) => (inputs.current[1] = ref)}
                 returnKeyType="next"
                 onSubmitEditing={() => inputs.current[2]?.focus()}
                 style={[
                     globalStyles.inputDark,
-                    errors.firstname ? globalStyles.errorInput : {},
+                    errors.reward ? globalStyles.errorInput : {},
                 ]}
-                onChangeText={(text) => setValue("firstname", text, true)}
+                onChangeText={(text) => setValue("reward", 0, true)}
             />
             <ErrorMessage
                 style={globalStyles.formErrorMessage}
                 errors={errors}
-                name="firstname"
+                name="reward"
                 as={<Text />}
             />
 
             <TextInput
                 autoCapitalize="none"
-                placeholder="Password"
+                placeholder="Description"
+                multiline
                 placeholderTextColor="rgba(41, 128, 185, 0.7)"
                 returnKeyType="next"
                 onSubmitEditing={() => handleSubmit(onSubmit)}
                 ref={(ref) => (inputs.current[2] = ref)}
                 style={[
                     globalStyles.inputDark,
-                    errors.password ? globalStyles.errorInput : {},
+                    errors.description ? globalStyles.errorInput : {},
+                    { height: 90 },
                 ]}
-                onChangeText={(text) => setValue("password", text, true)}
+                onChangeText={(text) => setValue("description", text, true)}
             />
             <ErrorMessage
                 style={globalStyles.formErrorMessage}
                 errors={errors}
-                name="password"
+                name="description"
                 as={<Text />}
             />
 
