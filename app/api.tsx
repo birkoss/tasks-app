@@ -89,8 +89,8 @@ export function Login(email: string, password: string) {
         });
 }
 
-export function GetRewards(token: string) {
-    let request = createRequest("rewards", "GET", null, token);
+export function GetData(token: string) {
+    let request = createRequest("getData", "GET", null, token);
 
     return fetch(request)
         .then((response) => response.json())
@@ -98,6 +98,7 @@ export function GetRewards(token: string) {
             if (data["rewards"] && data["rewards"] !== "") {
                 return {
                     rewards: data["rewards"],
+                    groups: data["groups"],
                 };
             }
 

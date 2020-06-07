@@ -10,7 +10,7 @@ import {
     AuthContextInitialValues,
 } from "./app/context";
 
-import { GetRewards } from "./app/api";
+import { GetData } from "./app/api";
 
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +31,7 @@ export default function App() {
                     },
                 });
 
-                GetRewards(token)
+                GetData(token)
                     .then((data) => {
                         dispatch({
                             type: "REWARDS",
@@ -40,7 +40,7 @@ export default function App() {
                             },
                         });
                     })
-                    .catch((error) => console.log(error));
+                    .catch((error) => console.log("error", error));
             }
             setIsLoading(false);
         } catch (error) {

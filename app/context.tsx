@@ -41,6 +41,7 @@ export const AuthContextReducer = (
 ) => {
     switch (action.type) {
         case "REWARDS":
+            console.log("REWARDS", action.payload.rewards);
             return {
                 ...state,
                 rewards: action.payload.rewards,

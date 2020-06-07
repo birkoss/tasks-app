@@ -30,7 +30,7 @@ function Home({ navigation }: Props) {
                 </Text>
             ),
         });
-    }, []);
+    }, [state.rewards]);
 
     return (
         <View style={styles.background}>
@@ -39,6 +39,9 @@ function Home({ navigation }: Props) {
                     onPress={() => navigation.push("Details", { taskID: 10 })}
                 >
                     <Text>Home</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => alert(state.rewards)}>
+                    <Text>Rewards</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() =>
