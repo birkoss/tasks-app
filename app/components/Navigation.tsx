@@ -16,12 +16,13 @@ import Register from "../screens/Register";
 import Home from "../screens/Home";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import TasksScreen from "../screens/TasksScreen";
-import ChildrenScreen from "../screens/ChildrenScreen";
-import UserAddScene from "../screens/UserAddScene";
+
+import UserAddScreen from "../screens/users/Add";
+import UserListScreen from "../screens/users/List";
 
 import {
     AuthStackParamList,
-    ChildrenStackParamList,
+    UsersStackParamList,
     HomeStackParamList,
     TasksStackParamList,
 } from "../types";
@@ -48,13 +49,13 @@ const TasksStackScreen = () => (
     </TasksStack.Navigator>
 );
 
-const ChildrenStack = createStackNavigator<ChildrenStackParamList>();
-const ChildrenStackScreen = () => {
+const UsersStack = createStackNavigator<UsersStackParamList>();
+const UsersStackScreen = () => {
     return (
-        <ChildrenStack.Navigator>
-            <ChildrenStack.Screen name="Children" component={ChildrenScreen} />
-            <ChildrenStack.Screen name="Add" component={UserAddScene} />
-        </ChildrenStack.Navigator>
+        <UsersStack.Navigator>
+            <UsersStack.Screen name="List" component={UserListScreen} />
+            <UsersStack.Screen name="Add" component={UserAddScreen} />
+        </UsersStack.Navigator>
     );
 };
 
@@ -94,10 +95,10 @@ const TabsScreen = () => {
             />
             {!state.isChildren && (
                 <Tabs.Screen
-                    name="Children"
-                    component={ChildrenStackScreen}
+                    name="Users"
+                    component={UsersStackScreen}
                     options={{
-                        tabBarLabel: "Children",
+                        tabBarLabel: "Users",
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons
                                 name="ios-person"

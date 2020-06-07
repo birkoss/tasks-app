@@ -38,21 +38,22 @@ export type HomeScreenNavigationProp = CompositeNavigationProp<
 export type TasksStackParamList = {
     Tasks: undefined;
     Details: { taskID: number };
+    Add: { onAdded: Function };
 };
 export type TasksScreenNavigationProp = CompositeNavigationProp<
     DrawerNavigationProp<DrawerParamList>,
     StackNavigationProp<TasksStackParamList>
 >;
 
-export type ChildrenStackParamList = {
-    Children: undefined;
+export type UsersStackParamList = {
+    List: undefined;
     Add: { onAdded: Function };
 };
-export type ChildrenScreenNavigationProp = CompositeNavigationProp<
+export type UsersScreenNavigationProp = CompositeNavigationProp<
     DrawerNavigationProp<DrawerParamList>,
-    StackNavigationProp<ChildrenStackParamList>
+    StackNavigationProp<UsersStackParamList>
 >;
-export type UserAddScreenRouteProp = RouteProp<ChildrenStackParamList, "Add">;
+export type UserAddScreenRouteProp = RouteProp<UsersStackParamList, "Add">;
 
 export interface Group {
     id: number;

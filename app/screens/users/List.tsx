@@ -2,29 +2,28 @@ import React, { useEffect, useContext, useState, useRef } from "react";
 
 import { Button, Container, Content, Icon, Text } from "native-base";
 
-import { ChildrenScreenNavigationProp } from "../types";
-import { navigationDrawerScreenOptions } from "../styles/navigation";
+import { UsersScreenNavigationProp } from "../../types";
+import { navigationDrawerScreenOptions } from "../../styles/navigation";
 
-import { GetUsers } from "../api";
-import { User } from "../types";
+import { GetUsers } from "../../api";
+import { User } from "../../types";
 
-import { Users } from "../components/Users";
+import { Users } from "../../components/Users";
 
-import { AuthContext } from "../context";
-import { Alert } from "react-native";
+import { AuthContext } from "../../context";
 
 type Props = {
-    navigation: ChildrenScreenNavigationProp;
+    navigation: UsersScreenNavigationProp;
 };
 
-const ChildrenScreen = ({ navigation }: Props) => {
+export default function UserListScreen({ navigation }: Props) {
     let [users, setUsers] = useState<User[]>([]);
 
     const { state, dispatch } = useContext(AuthContext);
 
     useEffect(() => {
         navigation.setOptions({
-            ...navigationDrawerScreenOptions("Children", () =>
+            ...navigationDrawerScreenOptions("Users", () =>
                 navigation.toggleDrawer()
             ),
             headerRight: ({}) => (
@@ -66,6 +65,4 @@ const ChildrenScreen = ({ navigation }: Props) => {
             </Content>
         </Container>
     );
-};
-
-export default ChildrenScreen;
+}
