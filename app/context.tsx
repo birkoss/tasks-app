@@ -51,7 +51,7 @@ export const AuthContextReducer = (
             try {
                 /* await */ AsyncStorage.setItem("token", action.payload.token);
             } catch (error) {
-                console.log(error);
+                console.log("AuthContextReducer/AsyncStorage.setItem", error);
             }
 
             return {

@@ -44,6 +44,15 @@ export type TasksScreenNavigationProp = CompositeNavigationProp<
     StackNavigationProp<TasksStackParamList>
 >;
 
+export type ChildrenStackParamList = {
+    Children: undefined;
+    Add: undefined;
+};
+export type ChildrenScreenNavigationProp = CompositeNavigationProp<
+    DrawerNavigationProp<DrawerParamList>,
+    StackNavigationProp<ChildrenStackParamList>
+>;
+
 export interface Group {
     id: number;
     name: string;
@@ -55,4 +64,13 @@ export interface Task {
     name: string;
     reward: number;
     description: string;
+}
+
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+    rewards: number;
+    is_children: boolean;
+    firstname?: string;
 }

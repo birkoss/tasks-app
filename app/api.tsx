@@ -1,3 +1,5 @@
+import { User } from "./types";
+
 const url = "http://127.0.0.1:8000/api/";
 
 class ApiError extends Error {
@@ -139,6 +141,75 @@ export function GetTasks(token: string, group: number) {
             if (data["message"]) {
                 throw new ApiError(data["message"]);
             }
+            /* Generic error */
+            throw new ApiError("An error occurred please try again later.");
+        })
+        .catch((error) => {
+            if (error.name !== "ApiError") {
+                throw new Error("An error occurred please try again later.");
+            }
+
+            throw error;
+        });
+}
+
+export function GetUsers(token: string, group: number) {
+    let request = createRequest(
+        "users/" + group.toString(),
+        "GET",
+        null,
+        token
+    );
+
+    return fetch(request)
+        .then((response) => response.json())
+        .then((data: any) => {
+            if (data["users"] && data["users"] !== "") {
+                return {
+                    users: data["users"],
+                };
+            }
+
+            /* Errors from the API */
+            if (data["message"]) {
+                throw new ApiError(data["message"]);
+            }
+            /* Generic error */
+            throw new ApiError("An error occurred please try again later.");
+        })
+        .catch((error) => {
+            if (error.name !== "ApiError") {
+                throw new Error("An error occurred please try again later.");
+            }
+
+            throw error;
+        });
+}
+
+export function AddUser(token: string, group: number, user: any) {
+    let request = createRequest(
+        "users/" + group.toString(),
+        "POST",
+        user,
+        token
+    );
+
+    return fetch(request)
+        .then((response) => response.json())
+        .then((data: any) => {
+            if (data["status"] && data["status"] === 200) {
+                return {};
+            }
+
+            /* Errors from the API */
+            if (data["message"]) {
+                for (let field in data["message"]) {
+                    throw new ApiError(
+                        field + ": " + data["message"][field].join(" ")
+                    );
+                }
+            }
+
             /* Generic error */
             throw new ApiError("An error occurred please try again later.");
         })

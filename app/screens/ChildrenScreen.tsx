@@ -1,0 +1,66 @@
+import React, { useEffect, useContext, useState, useRef } from "react";
+
+import { Button, Container, Content, Icon, Text } from "native-base";
+
+import { ChildrenScreenNavigationProp } from "../types";
+import { navigationDrawerScreenOptions } from "../styles/navigation";
+
+import { GetUsers } from "../api";
+import { User } from "../types";
+
+import { Users } from "../components/Users";
+
+import { AuthContext } from "../context";
+
+type Props = {
+    navigation: ChildrenScreenNavigationProp;
+};
+
+const ChildrenScreen = ({ navigation }: Props) => {
+    let [users, setUsers] = useState<User[]>([]);
+
+    const { state, dispatch } = useContext(AuthContext);
+
+    useEffect(() => {
+        navigation.setOptions({
+            ...navigationDrawerScreenOptions("Children", () =>
+                navigation.toggleDrawer()
+            ),
+            headerRight: ({}) => (
+                <Button
+                    transparent
+                    onPress={() => {
+                        navigation.push("Add");
+                    }}
+                >
+                    <Icon name="ios-add-circle" style={{ color: "white" }} />
+                </Button>
+            ),
+        });
+    }, []);
+
+    useEffect(() => {
+        GetUsers(state.token, state.currentGroup)
+            .then((data) => {
+                let newUsers: User[] = [];
+                data["users"].forEach((user: any) => {
+                    newUsers.push({
+                        ...user.user,
+                        is_children: user.is_children,
+                    });
+                });
+                setUsers(newUsers);
+            })
+            .catch((error) => console.log("error", error));
+    }, []);
+
+    return (
+        <Container>
+            <Content>
+                <Users users={users} />
+            </Content>
+        </Container>
+    );
+};
+
+export default ChildrenScreen;

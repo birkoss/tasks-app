@@ -31,4 +31,11 @@ export const globalStyles = StyleSheet.create({
         color: "#ffffff",
         paddingHorizontal: 10,
     },
+    inputDark: {
+        height: 40,
+        backgroundColor: "rgba(41, 128, 185, 0.2)",
+        marginTop: 10,
+        color: "#2980b9",
+        paddingHorizontal: 10,
+    },
 });

@@ -10,7 +10,6 @@ interface IProps {
 }
 
 export default function Button({ onPress, title, isSubmitting }: IProps) {
-    console.log(onPress);
     return (
         <TouchableOpacity
             style={globalStyles.buttonContainer}

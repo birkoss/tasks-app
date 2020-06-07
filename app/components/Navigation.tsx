@@ -16,9 +16,12 @@ import Register from "../screens/Register";
 import Home from "../screens/Home";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import TasksScreen from "../screens/TasksScreen";
+import ChildrenScreen from "../screens/ChildrenScreen";
+import UserAddScene from "../screens/UserAddScene";
 
 import {
     AuthStackParamList,
+    ChildrenStackParamList,
     HomeStackParamList,
     TasksStackParamList,
 } from "../types";
@@ -45,6 +48,16 @@ const TasksStackScreen = () => (
     </TasksStack.Navigator>
 );
 
+const ChildrenStack = createStackNavigator<ChildrenStackParamList>();
+const ChildrenStackScreen = () => {
+    return (
+        <ChildrenStack.Navigator>
+            <ChildrenStack.Screen name="Children" component={ChildrenScreen} />
+            <ChildrenStack.Screen name="Add" component={UserAddScene} />
+        </ChildrenStack.Navigator>
+    );
+};
+
 const ProfileStack = createStackNavigator();
 const ProfileStackScreen = () => (
     <ProfileStack.Navigator>
@@ -67,12 +80,22 @@ const TabsScreen = () => (
             component={HomeStackScreen}
             options={{
                 tabBarLabel: "My Tasks",
-                tabBarIcon: ({ focused, color, size }) => (
+                tabBarIcon: ({ color, size }) => (
                     <Ionicons
                         name="ios-information-circle"
                         size={size}
                         color={color}
                     />
+                ),
+            }}
+        />
+        <Tabs.Screen
+            name="Children"
+            component={ChildrenStackScreen}
+            options={{
+                tabBarLabel: "Children",
+                tabBarIcon: ({ color, size }) => (
+                    <Ionicons name="ios-person" size={size} color={color} />
                 ),
             }}
         />
