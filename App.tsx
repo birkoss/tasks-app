@@ -22,7 +22,45 @@ export default function App() {
         AuthContextInitialValues
     );
 
-    const getToken = async () => {
+    const getData = () => {
+        if (state.token === "") {
+            return;
+        }
+
+        GetData(state.token)
+            .then((data) => {
+                // Get all the groups
+                let groups: Group[] = [];
+                data["groups"].forEach((group: any) => {
+                    groups.push({
+                        id: group.group.id,
+                        name: group.group.name,
+                        is_children: group.is_children,
+                    });
+                });
+
+                // Select the first group available
+                let currentGroup: number = 0;
+                let isChildren: boolean = true;
+                groups.forEach((group) => {
+                    currentGroup = group.id;
+                    isChildren = group.is_children;
+                });
+
+                dispatch({
+                    type: "SETDATA",
+                    payload: {
+                        rewards: data["rewards"],
+                        groups: groups,
+                        currentGroup: currentGroup,
+                        isChildren: isChildren,
+                    },
+                });
+            })
+            .catch((error) => console.log("GetData.catch", error));
+    };
+
+    const getTokenFromStorage = async () => {
         try {
             const token = await AsyncStorage.getItem("token");
             if (token !== null) {
@@ -32,38 +70,6 @@ export default function App() {
                         token,
                     },
                 });
-
-                GetData(token)
-                    .then((data) => {
-                        // Get all the groups
-                        let groups: Group[] = [];
-                        data["groups"].forEach((group: any) => {
-                            groups.push({
-                                id: group.group.id,
-                                name: group.group.name,
-                                is_children: group.is_children,
-                            });
-                        });
-
-                        // Select the first group available
-                        let currentGroup: number = 0;
-                        let isChildren: boolean = true;
-                        groups.forEach((group) => {
-                            currentGroup = group.id;
-                            isChildren = group.is_children;
-                        });
-
-                        dispatch({
-                            type: "SETDATA",
-                            payload: {
-                                rewards: data["rewards"],
-                                groups: groups,
-                                currentGroup: currentGroup,
-                                isChildren: isChildren,
-                            },
-                        });
-                    })
-                    .catch((error) => console.log("error", error));
             }
             setIsLoading(false);
         } catch (error) {
@@ -72,8 +78,12 @@ export default function App() {
     };
 
     useEffect(() => {
-        getToken();
+        getTokenFromStorage();
     }, []);
+
+    useEffect(() => {
+        getData();
+    }, [state.token]);
 
     StatusBar.setBarStyle("light-content");
 

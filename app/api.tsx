@@ -97,7 +97,7 @@ export function GetData(token: string) {
     return fetch(request)
         .then((response) => response.json())
         .then((data: any) => {
-            if (data["rewards"] && data["rewards"] !== "") {
+            if (data["rewards"] !== undefined) {
                 return {
                     rewards: data["rewards"],
                     groups: data["groups"],
