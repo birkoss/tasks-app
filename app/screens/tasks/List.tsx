@@ -20,6 +20,18 @@ const TaskListScreen = ({ navigation }: Props) => {
 
     const { state } = useContext(AuthContext);
 
+    const getTasks = () => {
+        GetTasks(state.token, state.currentGroup)
+            .then((data) => {
+                let newTasks: Task[] = [];
+                data["tasks"].forEach((task: Task) => {
+                    newTasks.push(task);
+                });
+                setTasks(newTasks);
+            })
+            .catch((error) => console.log("error", error));
+    };
+
     useEffect(() => {
         navigation.setOptions({
             ...navigationDrawerScreenOptions("Tasks", () =>
@@ -48,15 +60,7 @@ const TaskListScreen = ({ navigation }: Props) => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", () => {
-            GetTasks(state.token, state.currentGroup)
-                .then((data) => {
-                    let newTasks: Task[] = [];
-                    data["tasks"].forEach((task: Task) => {
-                        newTasks.push(task);
-                    });
-                    setTasks(newTasks);
-                })
-                .catch((error) => console.log("error", error));
+            getTasks();
         });
 
         return unsubscribe;
@@ -65,7 +69,7 @@ const TaskListScreen = ({ navigation }: Props) => {
     return (
         <Container>
             <Content>
-                <Tasks tasks={tasks} />
+                <Tasks tasks={tasks} onRefresh={getTasks} />
             </Content>
         </Container>
     );

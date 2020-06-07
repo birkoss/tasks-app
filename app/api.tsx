@@ -257,3 +257,39 @@ export function AddTask(token: string, group: number, task: any) {
             throw error;
         });
 }
+
+export function DeleteTask(token: string, taskID: number) {
+    let request = createRequest(
+        "task/" + taskID.toString(),
+        "DELETE",
+        null,
+        token
+    );
+
+    return fetch(request)
+        .then((response) => response.json())
+        .then((data: any) => {
+            if (data["status"] && data["status"] === 200) {
+                return {};
+            }
+
+            /* Errors from the API */
+            if (data["message"]) {
+                for (let field in data["message"]) {
+                    throw new ApiError(
+                        field + ": " + data["message"][field].join(" ")
+                    );
+                }
+            }
+
+            /* Generic error */
+            throw new ApiError("An error occurred please try again later.");
+        })
+        .catch((error) => {
+            if (error.name !== "ApiError") {
+                throw new Error("An error occurred please try again later.");
+            }
+
+            throw error;
+        });
+}
