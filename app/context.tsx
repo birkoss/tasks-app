@@ -8,7 +8,7 @@ export const AuthContextInitialValues = {
     rewards: 0,
     token: "",
     groups: [],
-    currentGroup: undefined,
+    currentGroup: 0,
 };
 
 type AuthContextInitialStateType = {
@@ -16,7 +16,7 @@ type AuthContextInitialStateType = {
     rewards: number;
     token: string;
     groups: Group[];
-    currentGroup: Number | undefined;
+    currentGroup: number;
 };
 
 const AppContext = createContext<{
@@ -41,7 +41,6 @@ export const AuthContextReducer = (
 ) => {
     switch (action.type) {
         case "SETDATA":
-            console.log("SETDATA", action.payload);
             return {
                 ...state,
                 groups: action.payload.groups,

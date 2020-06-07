@@ -117,3 +117,36 @@ export function GetData(token: string) {
             throw error;
         });
 }
+
+export function GetTasks(token: string, group: number) {
+    let request = createRequest(
+        "tasks/" + group.toString(),
+        "GET",
+        null,
+        token
+    );
+
+    return fetch(request)
+        .then((response) => response.json())
+        .then((data: any) => {
+            if (data["tasks"] && data["tasks"] !== "") {
+                return {
+                    tasks: data["tasks"],
+                };
+            }
+
+            /* Errors from the API */
+            if (data["message"]) {
+                throw new ApiError(data["message"]);
+            }
+            /* Generic error */
+            throw new ApiError("An error occurred please try again later.");
+        })
+        .catch((error) => {
+            if (error.name !== "ApiError") {
+                throw new Error("An error occurred please try again later.");
+            }
+
+            throw error;
+        });
+}

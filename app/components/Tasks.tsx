@@ -12,7 +12,7 @@ import {
     Thumbnail,
 } from "native-base";
 
-import { Task } from "../task";
+import { Task } from "../types";
 
 type Props = {
     tasks: Task[];
@@ -51,7 +51,7 @@ export function Tasks({ tasks }: Props) {
                         </Left>
 
                         <Right>
-                            <Text>{task.rewards} $</Text>
+                            <Text>{task.reward} $</Text>
                         </Right>
                     </CardItem>
                 </Card>

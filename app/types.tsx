@@ -49,3 +49,10 @@ export interface Group {
     name: string;
     is_children: boolean;
 }
+
+export interface Task {
+    id: string;
+    name: string;
+    reward: number;
+    description: string;
+}
