@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Image } from "react-native";
 
 import {
@@ -9,7 +9,11 @@ import {
 
 import { Container, Content, Icon, Header, Body } from "native-base";
 
+import { AuthContext } from "../context";
+
 export function SideMenu(props: DrawerContentComponentProps) {
+    const { dispatch } = useContext(AuthContext);
+
     return (
         <Container>
             <Header style={styles.drawerHeader}>
@@ -27,7 +31,11 @@ export function SideMenu(props: DrawerContentComponentProps) {
                         <Icon name="ios-log-out" color={color} />
                     )}
                     label="Logout"
-                    onPress={() => console.log("...")}
+                    onPress={() =>
+                        dispatch({
+                            type: "LOGOUT",
+                        })
+                    }
                 />
             </Content>
         </Container>
