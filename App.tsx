@@ -12,6 +12,8 @@ import {
 
 import { GetData } from "./app/api";
 
+import { Group } from "./app/types";
+
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);
 
@@ -33,10 +35,28 @@ export default function App() {
 
                 GetData(token)
                     .then((data) => {
+                        // Get all the groups
+                        let groups: Group[] = [];
+                        data["groups"].forEach((group: any) => {
+                            groups.push({
+                                id: group.group.id,
+                                name: group.group.name,
+                                is_children: group.is_children,
+                            });
+                        });
+
+                        // Select the first group available
+                        let currentGroup: number = 0;
+                        groups.forEach((group) => {
+                            currentGroup = group.id;
+                        });
+
                         dispatch({
-                            type: "REWARDS",
+                            type: "SETDATA",
                             payload: {
                                 rewards: data["rewards"],
+                                groups: groups,
+                                currentGroup: currentGroup,
                             },
                         });
                     })

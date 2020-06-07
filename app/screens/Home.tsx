@@ -41,7 +41,7 @@ function Home({ navigation }: Props) {
                     <Text>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => alert(state.rewards)}>
-                    <Text>Rewards</Text>
+                    <Text>Rewards {state.currentGroup} </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() =>

@@ -43,3 +43,9 @@ export type TasksScreenNavigationProp = CompositeNavigationProp<
     DrawerNavigationProp<DrawerParamList>,
     StackNavigationProp<TasksStackParamList>
 >;
+
+export interface Group {
+    id: number;
+    name: string;
+    is_children: boolean;
+}
