@@ -12,6 +12,10 @@ import { validateEmail } from "../../validations";
 import { AddUser } from "../../api";
 import { AuthContext } from "../../context";
 
+type Props = {
+    onAdded: Function;
+};
+
 type formData = {
     email: string;
     password: string;
@@ -24,7 +28,7 @@ const defaultValues = {
     firstname: "",
 };
 
-export default function UserForm() {
+export default function UserForm({ onAdded }: Props) {
     const { state, dispatch } = useContext(AuthContext);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,16 +51,7 @@ export default function UserForm() {
 
     const onSubmitSuccess = (data: any) => {
         setIsSubmitting(false);
-
-        Alert.alert("ADDED!!");
-        /*
-        dispatch({
-            type: "LOGIN",
-            payload: {
-                token: data["token"],
-            },
-        });
-        */
+        onAdded();
     };
 
     const onSubmitFailed = (error: any) => {

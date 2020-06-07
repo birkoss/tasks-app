@@ -19,14 +19,6 @@ type AuthContextInitialStateType = {
     currentGroup: number;
 };
 
-const AppContext = createContext<{
-    state: AuthContextInitialStateType;
-    dispatch: React.Dispatch<any>;
-}>({
-    state: AuthContextInitialValues,
-    dispatch: () => null,
-});
-
 export const AuthContext = React.createContext<{
     state: AuthContextInitialStateType;
     dispatch: React.Dispatch<any>;

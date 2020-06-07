@@ -46,12 +46,13 @@ export type TasksScreenNavigationProp = CompositeNavigationProp<
 
 export type ChildrenStackParamList = {
     Children: undefined;
-    Add: undefined;
+    Add: { onAdded: Function };
 };
 export type ChildrenScreenNavigationProp = CompositeNavigationProp<
     DrawerNavigationProp<DrawerParamList>,
     StackNavigationProp<ChildrenStackParamList>
 >;
+export type UserAddScreenRouteProp = RouteProp<ChildrenStackParamList, "Add">;
 
 export interface Group {
     id: number;

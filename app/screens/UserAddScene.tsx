@@ -7,18 +7,23 @@ import {
 
 import UserForm from "../components/forms/UserForm";
 
-import { RegisterScreenNavigationProp } from "../types";
+import { ChildrenScreenNavigationProp, UserAddScreenRouteProp } from "../types";
 
 import { navigationScreenOptions } from "../styles/navigation";
 
 type Props = {
-    navigation: RegisterScreenNavigationProp;
+    navigation: ChildrenScreenNavigationProp;
+    route: UserAddScreenRouteProp;
 };
 
-export default function UserAddScene({ navigation }: Props) {
+export default function UserAddScene({ navigation, route }: Props) {
     useEffect(() => {
         navigation.setOptions(navigationScreenOptions("Add Children"));
     }, []);
+
+    const onAdded = () => {
+        navigation.goBack();
+    };
 
     return (
         <TouchableWithoutFeedback
@@ -30,7 +35,7 @@ export default function UserAddScene({ navigation }: Props) {
                 style={{ flex: 1, padding: 20, backgroundColor: "#ffffff" }}
                 behavior="padding"
             >
-                <UserForm />
+                <UserForm onAdded={onAdded} />
             </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
     );

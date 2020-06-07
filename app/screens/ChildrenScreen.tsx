@@ -11,6 +11,7 @@ import { User } from "../types";
 import { Users } from "../components/Users";
 
 import { AuthContext } from "../context";
+import { Alert } from "react-native";
 
 type Props = {
     navigation: ChildrenScreenNavigationProp;
@@ -40,19 +41,23 @@ const ChildrenScreen = ({ navigation }: Props) => {
     }, []);
 
     useEffect(() => {
-        GetUsers(state.token, state.currentGroup)
-            .then((data) => {
-                let newUsers: User[] = [];
-                data["users"].forEach((user: any) => {
-                    newUsers.push({
-                        ...user.user,
-                        is_children: user.is_children,
+        const unsubscribe = navigation.addListener("focus", () => {
+            GetUsers(state.token, state.currentGroup)
+                .then((data) => {
+                    let newUsers: User[] = [];
+                    data["users"].forEach((user: any) => {
+                        newUsers.push({
+                            ...user.user,
+                            is_children: user.is_children,
+                        });
                     });
-                });
-                setUsers(newUsers);
-            })
-            .catch((error) => console.log("error", error));
-    }, []);
+                    setUsers(newUsers);
+                })
+                .catch((error) => console.log("error", error));
+        });
+
+        return unsubscribe;
+    }, [navigation]);
 
     return (
         <Container>
