@@ -221,3 +221,39 @@ export function AddUser(token: string, group: number, user: any) {
             throw error;
         });
 }
+
+export function AddTask(token: string, group: number, task: any) {
+    let request = createRequest(
+        "tasks/" + group.toString(),
+        "POST",
+        task,
+        token
+    );
+
+    return fetch(request)
+        .then((response) => response.json())
+        .then((data: any) => {
+            if (data["status"] && data["status"] === 200) {
+                return {};
+            }
+
+            /* Errors from the API */
+            if (data["message"]) {
+                for (let field in data["message"]) {
+                    throw new ApiError(
+                        field + ": " + data["message"][field].join(" ")
+                    );
+                }
+            }
+
+            /* Generic error */
+            throw new ApiError("An error occurred please try again later.");
+        })
+        .catch((error) => {
+            if (error.name !== "ApiError") {
+                throw new Error("An error occurred please try again later.");
+            }
+
+            throw error;
+        });
+}

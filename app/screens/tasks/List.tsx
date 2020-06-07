@@ -47,16 +47,20 @@ const TaskListScreen = ({ navigation }: Props) => {
     }, []);
 
     useEffect(() => {
-        GetTasks(state.token, state.currentGroup)
-            .then((data) => {
-                let newTasks: Task[] = [];
-                data["tasks"].forEach((task: Task) => {
-                    newTasks.push(task);
-                });
-                setTasks(newTasks);
-            })
-            .catch((error) => console.log("error", error));
-    }, []);
+        const unsubscribe = navigation.addListener("focus", () => {
+            GetTasks(state.token, state.currentGroup)
+                .then((data) => {
+                    let newTasks: Task[] = [];
+                    data["tasks"].forEach((task: Task) => {
+                        newTasks.push(task);
+                    });
+                    setTasks(newTasks);
+                })
+                .catch((error) => console.log("error", error));
+        });
+
+        return unsubscribe;
+    }, [navigation]);
 
     return (
         <Container>

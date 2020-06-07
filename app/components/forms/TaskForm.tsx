@@ -9,7 +9,7 @@ import { globalStyles } from "../../styles/global";
 
 import { validateEmail } from "../../validations";
 
-import { AddUser } from "../../api";
+import { AddTask } from "../../api";
 import { AuthContext } from "../../context";
 
 type Props = {
@@ -42,7 +42,7 @@ export default function TaskForm({ onAdded }: Props) {
 
         Keyboard.dismiss();
 
-        AddUser(state.token, state.currentGroup, data)
+        AddTask(state.token, state.currentGroup, data)
             .then(onSubmitSuccess)
             .catch((error) => {
                 onSubmitFailed(error);
