@@ -15,7 +15,9 @@ import Login from "../screens/Login";
 import Register from "../screens/Register";
 import Home from "../screens/Home";
 import WelcomeScreen from "../screens/WelcomeScreen";
-import TasksListScreen from "../screens/tasks/List";
+
+import TaskListScreen from "../screens/tasks/List";
+import TaskAddScreen from "../screens/tasks/Add";
 
 import UserAddScreen from "../screens/users/Add";
 import UserListScreen from "../screens/users/List";
@@ -44,8 +46,8 @@ const HomeStackScreen = () => {
 const TasksStack = createStackNavigator<TasksStackParamList>();
 const TasksStackScreen = () => (
     <TasksStack.Navigator>
-        <TasksStack.Screen name="List" component={TasksListScreen} />
-        <TasksStack.Screen name="Add" component={Register} />
+        <TasksStack.Screen name="List" component={TaskListScreen} />
+        <TasksStack.Screen name="Add" component={TaskAddScreen} />
     </TasksStack.Navigator>
 );
 

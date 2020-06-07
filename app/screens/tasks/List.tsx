@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 
-import { Container, Content } from "native-base";
+import { Container, Content, Button, Icon } from "native-base";
 
 import { TasksScreenNavigationProp } from "../../types";
 import { navigationDrawerScreenOptions } from "../../styles/navigation";
@@ -15,17 +15,35 @@ type Props = {
     navigation: TasksScreenNavigationProp;
 };
 
-const TasksListScreen = ({ navigation }: Props) => {
+const TaskListScreen = ({ navigation }: Props) => {
     let [tasks, setTasks] = useState<Task[]>([]);
 
-    const { state, dispatch } = useContext(AuthContext);
+    const { state } = useContext(AuthContext);
 
     useEffect(() => {
-        navigation.setOptions(
-            navigationDrawerScreenOptions("Les taches", () =>
+        navigation.setOptions({
+            ...navigationDrawerScreenOptions("Tasks", () =>
                 navigation.toggleDrawer()
-            )
-        );
+            ),
+            headerRight: ({}) => {
+                if (state.isChildren) {
+                    return null;
+                }
+                return (
+                    <Button
+                        transparent
+                        onPress={() => {
+                            navigation.push("Add");
+                        }}
+                    >
+                        <Icon
+                            name="ios-add-circle"
+                            style={{ color: "white" }}
+                        />
+                    </Button>
+                );
+            },
+        });
     }, []);
 
     useEffect(() => {
@@ -49,4 +67,4 @@ const TasksListScreen = ({ navigation }: Props) => {
     );
 };
 
-export default TasksListScreen;
+export default TaskListScreen;
