@@ -36,8 +36,7 @@ export type HomeScreenNavigationProp = CompositeNavigationProp<
 >;
 
 export type TasksStackParamList = {
-    Tasks: undefined;
-    Details: { taskID: number };
+    List: undefined;
     Add: { onAdded: Function };
 };
 export type TasksScreenNavigationProp = CompositeNavigationProp<

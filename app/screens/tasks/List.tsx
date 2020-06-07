@@ -2,20 +2,20 @@ import React, { useEffect, useContext, useState } from "react";
 
 import { Container, Content } from "native-base";
 
-import { TasksScreenNavigationProp } from "../types";
-import { navigationDrawerScreenOptions } from "../styles/navigation";
+import { TasksScreenNavigationProp } from "../../types";
+import { navigationDrawerScreenOptions } from "../../styles/navigation";
 
-import { GetTasks } from "../api";
+import { GetTasks } from "../../api";
 
-import { Tasks } from "../components/Tasks";
-import { Task } from "../types";
-import { AuthContext } from "../context";
+import { Tasks } from "../../components/Tasks";
+import { Task } from "../../types";
+import { AuthContext } from "../../context";
 
 type Props = {
     navigation: TasksScreenNavigationProp;
 };
 
-const TasksScreen = ({ navigation }: Props) => {
+const TasksListScreen = ({ navigation }: Props) => {
     let [tasks, setTasks] = useState<Task[]>([]);
 
     const { state, dispatch } = useContext(AuthContext);
@@ -49,4 +49,4 @@ const TasksScreen = ({ navigation }: Props) => {
     );
 };
 
-export default TasksScreen;
+export default TasksListScreen;
