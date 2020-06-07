@@ -5,6 +5,7 @@ import { Group } from "./types";
 
 export const AuthContextInitialValues = {
     isAuthenticated: false,
+    isChildren: true,
     rewards: 0,
     token: "",
     groups: [],
@@ -13,6 +14,7 @@ export const AuthContextInitialValues = {
 
 type AuthContextInitialStateType = {
     isAuthenticated: boolean;
+    isChildren: boolean;
     rewards: number;
     token: string;
     groups: Group[];
@@ -38,6 +40,7 @@ export const AuthContextReducer = (
                 groups: action.payload.groups,
                 rewards: action.payload.rewards,
                 currentGroup: action.payload.currentGroup,
+                isChildren: action.payload.isChildren,
             };
         case "LOGIN":
             try {

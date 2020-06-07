@@ -47,8 +47,10 @@ export default function App() {
 
                         // Select the first group available
                         let currentGroup: number = 0;
+                        let isChildren: boolean = true;
                         groups.forEach((group) => {
                             currentGroup = group.id;
+                            isChildren = group.is_children;
                         });
 
                         dispatch({
@@ -57,6 +59,7 @@ export default function App() {
                                 rewards: data["rewards"],
                                 groups: groups,
                                 currentGroup: currentGroup,
+                                isChildren: isChildren,
                             },
                         });
                     })

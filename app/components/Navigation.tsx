@@ -66,56 +66,66 @@ const ProfileStackScreen = () => (
 );
 
 const Tabs = createBottomTabNavigator();
-const TabsScreen = () => (
-    <Tabs.Navigator
-        tabBarOptions={{
-            inactiveBackgroundColor: "#3498db",
-            inactiveTintColor: "rgba(255, 255, 255, 0.8)",
-            activeBackgroundColor: "#2980b9",
-            activeTintColor: "#ffffff",
-        }}
-    >
-        <Tabs.Screen
-            name="Home"
-            component={HomeStackScreen}
-            options={{
-                tabBarLabel: "My Tasks",
-                tabBarIcon: ({ color, size }) => (
-                    <Ionicons
-                        name="ios-information-circle"
-                        size={size}
-                        color={color}
-                    />
-                ),
+const TabsScreen = () => {
+    const { state } = useContext(AuthContext);
+
+    return (
+        <Tabs.Navigator
+            tabBarOptions={{
+                inactiveBackgroundColor: "#3498db",
+                inactiveTintColor: "rgba(255, 255, 255, 0.8)",
+                activeBackgroundColor: "#2980b9",
+                activeTintColor: "#ffffff",
             }}
-        />
-        <Tabs.Screen
-            name="Children"
-            component={ChildrenStackScreen}
-            options={{
-                tabBarLabel: "Children",
-                tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="ios-person" size={size} color={color} />
-                ),
-            }}
-        />
-        <Tabs.Screen
-            name="Tasks"
-            component={TasksStackScreen}
-            options={{
-                tabBarLabel: "All Tasks",
-                tabBarIcon: ({ color, size }) => (
-                    <IconWithBadge
-                        name="ios-list"
-                        size={size}
-                        color={color}
-                        badgeCount={3}
-                    />
-                ),
-            }}
-        />
-    </Tabs.Navigator>
-);
+        >
+            <Tabs.Screen
+                name="Home"
+                component={HomeStackScreen}
+                options={{
+                    tabBarLabel: "My Tasks",
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons
+                            name="ios-information-circle"
+                            size={size}
+                            color={color}
+                        />
+                    ),
+                }}
+            />
+            {!state.isChildren && (
+                <Tabs.Screen
+                    name="Children"
+                    component={ChildrenStackScreen}
+                    options={{
+                        tabBarLabel: "Children",
+                        tabBarIcon: ({ color, size }) => (
+                            <Ionicons
+                                name="ios-person"
+                                size={size}
+                                color={color}
+                            />
+                        ),
+                    }}
+                />
+            )}
+            <Tabs.Screen
+                name="Tasks"
+                component={TasksStackScreen}
+                options={{
+                    tabBarLabel: "All Tasks",
+                    tabBarIcon: ({ color, size }) => (
+                        <IconWithBadge
+                            name="ios-list"
+                            size={size}
+                            color={color}
+                            badgeCount={3}
+                        />
+                    ),
+                }}
+            />
+        </Tabs.Navigator>
+    );
+};
 
 const Drawer = createDrawerNavigator();
 
