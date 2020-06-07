@@ -1,5 +1,7 @@
 import React from "react";
 
+import { View } from "react-native";
+
 import {
     Button,
     Text,
@@ -25,12 +27,33 @@ export function Tasks({ tasks }: Props) {
                 <Card key={task.id} style={{ flex: 0 }}>
                     <CardItem>
                         <Left>
-                            <Thumbnail
-                                source={{
-                                    uri:
-                                        "https://img.icons8.com/material/4ac144/256/user-male.png",
+                            <View
+                                style={{
+                                    backgroundColor: "#2980b9",
+                                    borderRadius: 50,
+                                    width: 50,
+                                    height: 50,
                                 }}
-                            />
+                            >
+                                <View
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        flex: 1,
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            marginLeft: 0,
+                                            fontWeight: "bold",
+                                            color: "white",
+                                        }}
+                                    >
+                                        {task.reward} $
+                                    </Text>
+                                </View>
+                            </View>
                             <Body>
                                 <Text>{task.name}</Text>
                                 <Text note>April 15, 2020</Text>

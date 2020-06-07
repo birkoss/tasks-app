@@ -113,7 +113,9 @@ export default function TaskForm({ onAdded }: Props) {
                     globalStyles.inputDark,
                     errors.reward ? globalStyles.errorInput : {},
                 ]}
-                onChangeText={(text) => setValue("reward", 0, true)}
+                onChangeText={(text) =>
+                    setValue("reward", parseInt(text), true)
+                }
             />
             <ErrorMessage
                 style={globalStyles.formErrorMessage}
