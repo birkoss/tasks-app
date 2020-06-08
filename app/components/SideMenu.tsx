@@ -16,7 +16,7 @@ export function SideMenu(props: DrawerContentComponentProps) {
 
     return (
         <Container>
-            <Header style={styles.drawerHeader}>
+            <Header style={styles.drawerHeader} iosBarStyle="light-content">
                 <Body>
                     <Image
                         style={styles.drawerImage}

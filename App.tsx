@@ -87,8 +87,6 @@ export default function App() {
         getData();
     }, [state.token]);
 
-    StatusBar.setBarStyle("light-content");
-
     if (isLoading) {
         return <Loading />;
     }
