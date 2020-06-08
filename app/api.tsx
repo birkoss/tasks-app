@@ -30,26 +30,23 @@ function createRequest(
     return request;
 }
 
-export function Register(email: string, password: string) {
-    let request = createRequest("register", "POST", { email, password });
-
+function fetchRequest(request: Request, response: Function) {
     return fetch(request)
         .then((response) => response.json())
         .then((data: any) => {
-            if (data["token"] && data["token"] !== "") {
-                return {
-                    token: data["token"],
-                };
+            // Everything is fine from the API
+            if (data["status"] && data["status"] === 200) {
+                return response(data);
             }
 
-            /* Errors from the API */
+            // Errors from the API
             if (data["message"]) {
                 for (let field in data["message"]) {
                     throw new ApiError(data["message"][field].join(" "));
                 }
             }
 
-            /* Generic error */
+            // Generic error
             throw new ApiError("An error occurred please try again later.");
         })
         .catch((error) => {
@@ -59,64 +56,38 @@ export function Register(email: string, password: string) {
 
             throw error;
         });
+}
+
+export function Register(email: string, password: string) {
+    let request = createRequest("register", "POST", { email, password });
+
+    return fetchRequest(request, (data: any) => {
+        return {
+            token: data["token"],
+        };
+    });
 }
 
 export function Login(email: string, password: string) {
     let request = createRequest("login", "POST", { email, password });
 
-    return fetch(request)
-        .then((response) => response.json())
-        .then((data: any) => {
-            if (data["token"] && data["token"] !== "") {
-                return {
-                    token: data["token"],
-                };
-            }
-
-            /* Errors from the API */
-            if (data["message"]) {
-                throw new ApiError(data["message"]);
-            }
-            /* Generic error */
-            throw new ApiError("An error occurred please try again later.");
-        })
-        .catch((error) => {
-            if (error.name !== "ApiError") {
-                throw new Error("An error occurred please try again later.");
-            }
-
-            throw error;
-        });
+    return fetchRequest(request, (data: any) => {
+        return {
+            token: data["token"],
+        };
+    });
 }
 
 export function GetData(token: string) {
     let request = createRequest("account", "GET", null, token);
 
-    return fetch(request)
-        .then((response) => response.json())
-        .then((data: any) => {
-            if (data["rewards"] !== undefined) {
-                return {
-                    id: data["id"],
-                    rewards: data["rewards"],
-                    groups: data["groups"],
-                };
-            }
-
-            /* Errors from the API */
-            if (data["message"]) {
-                throw new ApiError(data["message"]);
-            }
-            /* Generic error */
-            throw new ApiError("An error occurred please try again later.");
-        })
-        .catch((error) => {
-            if (error.name !== "ApiError") {
-                throw new Error("An error occurred please try again later.");
-            }
-
-            throw error;
-        });
+    return fetchRequest(request, (data: any) => {
+        return {
+            id: data["id"],
+            rewards: data["rewards"],
+            groups: data["groups"],
+        };
+    });
 }
 
 export function GetTasks(token: string, group: number, user: number = 0) {
@@ -127,59 +98,21 @@ export function GetTasks(token: string, group: number, user: number = 0) {
         token
     );
 
-    console.log(request);
-
-    return fetch(request)
-        .then((response) => response.json())
-        .then((data: any) => {
-            if (data["tasks"] && data["tasks"] !== "") {
-                return {
-                    tasks: data["tasks"],
-                };
-            }
-
-            /* Errors from the API */
-            if (data["message"]) {
-                throw new ApiError(data["message"]);
-            }
-            /* Generic error */
-            throw new ApiError("An error occurred please try again later.");
-        })
-        .catch((error) => {
-            if (error.name !== "ApiError") {
-                throw new Error("An error occurred please try again later.");
-            }
-
-            throw error;
-        });
+    return fetchRequest(request, (data: any) => {
+        return {
+            tasks: data["tasks"],
+        };
+    });
 }
 
 export function GetUsers(token: string, group: number) {
     let request = createRequest("users", "GET", null, token);
 
-    return fetch(request)
-        .then((response) => response.json())
-        .then((data: any) => {
-            if (data["users"] && data["users"] !== "") {
-                return {
-                    users: data["users"],
-                };
-            }
-
-            /* Errors from the API */
-            if (data["message"]) {
-                throw new ApiError(data["message"]);
-            }
-            /* Generic error */
-            throw new ApiError("An error occurred please try again later.");
-        })
-        .catch((error) => {
-            if (error.name !== "ApiError") {
-                throw new Error("An error occurred please try again later.");
-            }
-
-            throw error;
-        });
+    return fetchRequest(request, (data: any) => {
+        return {
+            users: data["users"],
+        };
+    });
 }
 
 export function AddUser(token: string, group: number, user: any) {
@@ -190,32 +123,9 @@ export function AddUser(token: string, group: number, user: any) {
         token
     );
 
-    return fetch(request)
-        .then((response) => response.json())
-        .then((data: any) => {
-            if (data["status"] && data["status"] === 200) {
-                return {};
-            }
-
-            /* Errors from the API */
-            if (data["message"]) {
-                for (let field in data["message"]) {
-                    throw new ApiError(
-                        field + ": " + data["message"][field].join(" ")
-                    );
-                }
-            }
-
-            /* Generic error */
-            throw new ApiError("An error occurred please try again later.");
-        })
-        .catch((error) => {
-            if (error.name !== "ApiError") {
-                throw new Error("An error occurred please try again later.");
-            }
-
-            throw error;
-        });
+    return fetchRequest(request, (data: any) => {
+        return {};
+    });
 }
 
 export function AddTask(token: string, group: number, task: any) {
@@ -226,32 +136,9 @@ export function AddTask(token: string, group: number, task: any) {
         token
     );
 
-    return fetch(request)
-        .then((response) => response.json())
-        .then((data: any) => {
-            if (data["status"] && data["status"] === 200) {
-                return {};
-            }
-
-            /* Errors from the API */
-            if (data["message"]) {
-                for (let field in data["message"]) {
-                    throw new ApiError(
-                        field + ": " + data["message"][field].join(" ")
-                    );
-                }
-            }
-
-            /* Generic error */
-            throw new ApiError("An error occurred please try again later.");
-        })
-        .catch((error) => {
-            if (error.name !== "ApiError") {
-                throw new Error("An error occurred please try again later.");
-            }
-
-            throw error;
-        });
+    return fetchRequest(request, (data: any) => {
+        return {};
+    });
 }
 
 export function DeleteTask(token: string, taskID: number) {
@@ -262,32 +149,9 @@ export function DeleteTask(token: string, taskID: number) {
         token
     );
 
-    return fetch(request)
-        .then((response) => response.json())
-        .then((data: any) => {
-            if (data["status"] && data["status"] === 200) {
-                return {};
-            }
-
-            /* Errors from the API */
-            if (data["message"]) {
-                for (let field in data["message"]) {
-                    throw new ApiError(
-                        field + ": " + data["message"][field].join(" ")
-                    );
-                }
-            }
-
-            /* Generic error */
-            throw new ApiError("An error occurred please try again later.");
-        })
-        .catch((error) => {
-            if (error.name !== "ApiError") {
-                throw new Error("An error occurred please try again later.");
-            }
-
-            throw error;
-        });
+    return fetchRequest(request, (data: any) => {
+        return {};
+    });
 }
 
 export function UserSelectTask(token: string, taskID: number) {
@@ -298,28 +162,9 @@ export function UserSelectTask(token: string, taskID: number) {
         token
     );
 
-    return fetch(request)
-        .then((response) => response.json())
-        .then((data: any) => {
-            if (data["status"] && data["status"] === 200) {
-                return {};
-            }
-
-            /* Errors from the API */
-            if (data["message"]) {
-                throw new ApiError(data["message"]);
-            }
-
-            /* Generic error */
-            throw new ApiError("An error occurred please try again later.");
-        })
-        .catch((error) => {
-            if (error.name !== "ApiError") {
-                throw new Error("An error occurred please try again later.");
-            }
-
-            throw error;
-        });
+    return fetchRequest(request, (data: any) => {
+        return {};
+    });
 }
 
 export function UserUnselectTask(token: string, taskID: number) {
@@ -330,26 +175,7 @@ export function UserUnselectTask(token: string, taskID: number) {
         token
     );
 
-    return fetch(request)
-        .then((response) => response.json())
-        .then((data: any) => {
-            if (data["status"] && data["status"] === 200) {
-                return {};
-            }
-
-            /* Errors from the API */
-            if (data["message"]) {
-                throw new ApiError(data["message"]);
-            }
-
-            /* Generic error */
-            throw new ApiError("An error occurred please try again later.");
-        })
-        .catch((error) => {
-            if (error.name !== "ApiError") {
-                throw new Error("An error occurred please try again later.");
-            }
-
-            throw error;
-        });
+    return fetchRequest(request, (data: any) => {
+        return {};
+    });
 }
