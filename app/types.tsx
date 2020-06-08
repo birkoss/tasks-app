@@ -65,6 +65,13 @@ export interface Task {
     name: string;
     reward: number;
     description: string;
+    taskusers: TaskUser[];
+}
+
+export interface TaskUser {
+    user: User;
+    date_validated: string;
+    date_completed: string;
 }
 
 export interface User {

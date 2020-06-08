@@ -15,7 +15,7 @@ import {
 
 import { Task } from "../types";
 import { AuthContext } from "../context";
-import { DeleteTask, UserSelectTask } from "../api";
+import { DeleteTask, UserSelectTask, UserUnselectTask } from "../api";
 import { globalStyles } from "../styles/global";
 
 type Props = {
@@ -35,6 +35,12 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
 
     const selectTask = (taskID: number) => {
         UserSelectTask(state.token, taskID)
+            .then((data) => onRefresh())
+            .catch((error) => Alert.alert(error.message));
+    };
+
+    const unselectTask = (taskID: number) => {
+        UserUnselectTask(state.token, taskID)
             .then((data) => onRefresh())
             .catch((error) => Alert.alert(error.message));
     };
@@ -96,7 +102,7 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                     </CardItem>
                     <CardItem footer bordered>
                         <Left>
-                            {state.isChildren && (
+                            {state.isChildren && task.taskusers.length === 0 && (
                                 <Button
                                     transparent
                                     onPress={() => selectTask(task.id)}
@@ -109,12 +115,24 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                                     <Text style={styles.action}>Select</Text>
                                 </Button>
                             )}
+                            {state.isChildren && task.taskusers.length !== 0 && (
+                                <Button
+                                    transparent
+                                    onPress={() => unselectTask(task.id)}
+                                >
+                                    <Icon
+                                        style={styles.action}
+                                        active
+                                        name="ios-remove-circle"
+                                    />
+                                    <Text style={styles.action}>Unselect</Text>
+                                </Button>
+                            )}
+
                             {!state.isChildren && (
                                 <Button
                                     transparent
-                                    onPress={() =>
-                                        askConfirmation(parseInt(task.id))
-                                    }
+                                    onPress={() => askConfirmation(task.id)}
                                 >
                                     <Icon
                                         style={styles.actionDelete}
@@ -129,7 +147,13 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                         </Left>
 
                         <Right>
-                            <Text>{task.reward} $</Text>
+                            {state.isChildren &&
+                                task.taskusers.length !== 0 && (
+                                    <Text>
+                                        Selected by{" "}
+                                        {task.taskusers[0].user.firstname}
+                                    </Text>
+                                )}
                         </Right>
                     </CardItem>
                 </Card>
