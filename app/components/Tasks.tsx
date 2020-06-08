@@ -21,7 +21,7 @@ import { globalStyles } from "../styles/global";
 type Props = {
     tasks: Task[];
     onRefresh: Function;
-    onAdd: Function;
+    onAdd?: Function;
 };
 
 export function Tasks({ tasks, onRefresh, onAdd }: Props) {
@@ -67,7 +67,7 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                 <Text style={globalStyles.emptyText}>
                     No task at the moment.
                 </Text>
-                {!state.isChildren && (
+                {!state.isChildren && onAdd !== undefined && (
                     <Button transparent onPress={() => onAdd()}>
                         <Text style={globalStyles.link}>Add a new task</Text>
                     </Button>

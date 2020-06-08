@@ -1,10 +1,15 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
-import { AuthContext } from "../context";
+import { Container, Content, Button, Icon } from "native-base";
 
-import { HomeScreenNavigationProp } from "../types";
+import { AuthContext } from "../context";
+import { Tasks } from "../components/Tasks";
+
+import { HomeScreenNavigationProp, Task } from "../types";
 import { navigationDrawerScreenOptions } from "../styles/navigation";
+
+import { GetTasks } from "../api";
 
 type Props = {
     navigation: HomeScreenNavigationProp;
@@ -12,10 +17,24 @@ type Props = {
 
 function Home({ navigation }: Props) {
     const { state, dispatch } = useContext(AuthContext);
+    let [tasks, setTasks] = useState<Task[]>([]);
+
+    const getTasks = () => {
+        console.log("getTasks", state);
+        GetTasks(state.token, state.currentGroup)
+            .then((data) => {
+                let newTasks: Task[] = [];
+                data["tasks"].forEach((task: Task) => {
+                    newTasks.push(task);
+                });
+                setTasks(newTasks);
+            })
+            .catch((error) => console.log("error", error));
+    };
 
     useEffect(() => {
         navigation.setOptions({
-            ...navigationDrawerScreenOptions("My tasks", () =>
+            ...navigationDrawerScreenOptions("My Tasks", () =>
                 navigation.toggleDrawer()
             ),
             headerRight: ({}) => (
@@ -32,28 +51,20 @@ function Home({ navigation }: Props) {
         });
     }, [state.rewards]);
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () => {
+            getTasks();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
+
     return (
-        <View style={styles.background}>
-            <View style={styles.logoContainer}>
-                <TouchableOpacity
-                    onPress={() => navigation.push("Details", { taskID: 10 })}
-                >
-                    <Text>Home</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => alert(state.rewards)}>
-                    <Text>Rewards {state.isChildren ? "C" : "P"} </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() =>
-                        dispatch({
-                            type: "LOGOUT",
-                        })
-                    }
-                >
-                    <Text>Logout</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+        <Container>
+            <Content contentContainerStyle={{ flexGrow: 1 }}>
+                <Tasks tasks={tasks} onRefresh={getTasks} />
+            </Content>
+        </Container>
     );
 }
 

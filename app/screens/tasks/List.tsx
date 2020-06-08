@@ -22,6 +22,7 @@ const TaskListScreen = ({ navigation }: Props) => {
     const { state } = useContext(AuthContext);
 
     const getTasks = () => {
+        console.log("getTasks", state);
         GetTasks(state.token, state.currentGroup)
             .then((data) => {
                 let newTasks: Task[] = [];
