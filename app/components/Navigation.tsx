@@ -4,6 +4,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { IconWithBadge } from "../components/IconWithBadge";
 
+import { Icon } from "native-base";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -14,7 +16,6 @@ import { SideMenu } from "./SideMenu";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
 import Home from "../screens/Home";
-import WelcomeScreen from "../screens/WelcomeScreen";
 
 import TaskListScreen from "../screens/tasks/List";
 import TaskAddScreen from "../screens/tasks/Add";
@@ -60,13 +61,6 @@ const UsersStackScreen = () => {
         </UsersStack.Navigator>
     );
 };
-
-const ProfileStack = createStackNavigator();
-const ProfileStackScreen = () => (
-    <ProfileStack.Navigator>
-        <ProfileStack.Screen name="Profile" component={WelcomeScreen} />
-    </ProfileStack.Navigator>
-);
 
 const Tabs = createBottomTabNavigator();
 const TabsScreen = () => {
@@ -146,11 +140,10 @@ export default function Navigation() {
                         component={TabsScreen}
                         options={{
                             drawerLabel: "Home",
+                            drawerIcon: ({ color }) => (
+                                <Icon name="ios-home" color={color} />
+                            ),
                         }}
-                    />
-                    <Drawer.Screen
-                        name="Profile"
-                        component={ProfileStackScreen}
                     />
                 </Drawer.Navigator>
             ) : (

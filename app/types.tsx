@@ -2,15 +2,8 @@ import { CompositeNavigationProp, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 
-/*type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Profile'>;
-
-type Props = {
-  route: ProfileScreenRouteProp;
-};*/
-
 export type DrawerParamList = {
     Home: undefined;
-    Profile: undefined;
 };
 
 export type AuthStackParamList = {
