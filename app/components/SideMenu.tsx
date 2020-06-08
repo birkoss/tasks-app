@@ -24,10 +24,10 @@ export function SideMenu(props: DrawerContentComponentProps) {
                     />
                 </Body>
             </Header>
-            <Content>
+            <Content style={styles.container}>
                 <DrawerItemList {...props} />
                 <DrawerItem
-                    icon={({ size, color }) => (
+                    icon={({ color }) => (
                         <Icon name="ios-log-out" color={color} />
                     )}
                     label="Logout"
@@ -43,14 +43,12 @@ export function SideMenu(props: DrawerContentComponentProps) {
 }
 
 const styles = StyleSheet.create({
-    bottomDrawerSection: {
-        marginBottom: 15,
-        borderTopColor: "#f4f4f4",
-        borderTopWidth: 1,
+    container: {
+        backgroundColor: "#ffffff",
     },
     drawerHeader: {
         height: 200,
-        backgroundColor: "white",
+        backgroundColor: "#2980b9",
     },
     drawerImage: {
         height: 150,

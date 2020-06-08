@@ -13,6 +13,8 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { SideMenu } from "./SideMenu";
 
+import { globalStyles } from "../styles/global";
+
 import LoginScreen from "../screens/Login";
 import RegisterScreen from "../screens/Register";
 import HomeScreen from "../screens/Home";
@@ -133,6 +135,9 @@ export default function Navigation() {
         <NavigationContainer>
             {state.isAuthenticated ? (
                 <Drawer.Navigator
+                    drawerContentOptions={{
+                        activeBackgroundColor: "#f4f4f4",
+                    }}
                     drawerContent={(props) => <SideMenu {...props} />}
                 >
                     <Drawer.Screen
