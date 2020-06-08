@@ -45,10 +45,7 @@ export default function UserListScreen({ navigation }: Props) {
                 .then((data) => {
                     let newUsers: User[] = [];
                     data["users"].forEach((user: any) => {
-                        newUsers.push({
-                            ...user.user,
-                            is_children: user.is_children,
-                        });
+                        newUsers.push(user);
                     });
                     setUsers(newUsers);
                 })

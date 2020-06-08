@@ -1,5 +1,3 @@
-import { User } from "./types";
-
 const url = "http://127.0.0.1:8000/api/";
 
 class ApiError extends Error {
@@ -157,12 +155,7 @@ export function GetTasks(token: string, group: number, user: number = 0) {
 }
 
 export function GetUsers(token: string, group: number) {
-    let request = createRequest(
-        "users/" + group.toString(),
-        "GET",
-        null,
-        token
-    );
+    let request = createRequest("users", "GET", null, token);
 
     return fetch(request)
         .then((response) => response.json())
@@ -191,7 +184,7 @@ export function GetUsers(token: string, group: number) {
 
 export function AddUser(token: string, group: number, user: any) {
     let request = createRequest(
-        "users/" + group.toString(),
+        "groups/" + group.toString() + "/users",
         "POST",
         user,
         token
@@ -227,7 +220,7 @@ export function AddUser(token: string, group: number, user: any) {
 
 export function AddTask(token: string, group: number, task: any) {
     let request = createRequest(
-        "tasks/" + group.toString(),
+        "groups/" + group.toString() + "/tasks",
         "POST",
         task,
         token
