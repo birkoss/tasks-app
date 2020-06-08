@@ -1,16 +1,7 @@
-import React, { createContext } from "react";
+import React from "react";
 import { AsyncStorage } from "react-native";
 
 import { Group } from "./types";
-
-export const AuthContextInitialValues = {
-    isAuthenticated: false,
-    isChildren: true,
-    rewards: 0,
-    token: "",
-    groups: [],
-    currentGroup: 0,
-};
 
 type AuthContextInitialStateType = {
     isAuthenticated: boolean;
@@ -18,7 +9,18 @@ type AuthContextInitialStateType = {
     rewards: number;
     token: string;
     groups: Group[];
+    userID: number;
     currentGroup: number;
+};
+
+export const AuthContextInitialValues = {
+    isAuthenticated: false,
+    isChildren: true,
+    rewards: 0,
+    token: "",
+    groups: [],
+    userID: 0,
+    currentGroup: 0,
 };
 
 export const AuthContext = React.createContext<{
@@ -37,6 +39,7 @@ export const AuthContextReducer = (
         case "SETDATA":
             return {
                 ...state,
+                userID: action.payload.id,
                 groups: action.payload.groups,
                 rewards: action.payload.rewards,
                 currentGroup: action.payload.currentGroup,

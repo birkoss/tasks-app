@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
-import { Container, Content, Button, Icon } from "native-base";
+import { Container, Content } from "native-base";
 
 import { AuthContext } from "../context";
 import { Tasks } from "../components/Tasks";
@@ -16,12 +16,11 @@ type Props = {
 };
 
 function Home({ navigation }: Props) {
-    const { state, dispatch } = useContext(AuthContext);
+    const { state } = useContext(AuthContext);
     let [tasks, setTasks] = useState<Task[]>([]);
 
     const getTasks = () => {
-        console.log("getTasks", state);
-        GetTasks(state.token, state.currentGroup)
+        GetTasks(state.token, state.currentGroup, state.userID)
             .then((data) => {
                 let newTasks: Task[] = [];
                 data["tasks"].forEach((task: Task) => {

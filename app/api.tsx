@@ -92,13 +92,14 @@ export function Login(email: string, password: string) {
 }
 
 export function GetData(token: string) {
-    let request = createRequest("getData", "GET", null, token);
+    let request = createRequest("account", "GET", null, token);
 
     return fetch(request)
         .then((response) => response.json())
         .then((data: any) => {
             if (data["rewards"] !== undefined) {
                 return {
+                    id: data["id"],
                     rewards: data["rewards"],
                     groups: data["groups"],
                 };
@@ -120,13 +121,15 @@ export function GetData(token: string) {
         });
 }
 
-export function GetTasks(token: string, group: number) {
+export function GetTasks(token: string, group: number, user: number = 0) {
     let request = createRequest(
-        "tasks/" + group.toString(),
+        user > 0 ? "users/" + user.toString() + "/tasks" : "tasks",
         "GET",
         null,
         token
     );
+
+    console.log(request);
 
     return fetch(request)
         .then((response) => response.json())
@@ -260,7 +263,7 @@ export function AddTask(token: string, group: number, task: any) {
 
 export function DeleteTask(token: string, taskID: number) {
     let request = createRequest(
-        "task/" + taskID.toString(),
+        "tasks/" + taskID.toString(),
         "DELETE",
         null,
         token
@@ -296,11 +299,9 @@ export function DeleteTask(token: string, taskID: number) {
 
 export function UserSelectTask(token: string, taskID: number) {
     let request = createRequest(
-        "user/tasks",
-        "POST",
-        {
-            task_id: taskID,
-        },
+        "tasks/" + taskID.toString() + "/select",
+        "PUT",
+        null,
         token
     );
 
@@ -330,8 +331,8 @@ export function UserSelectTask(token: string, taskID: number) {
 
 export function UserUnselectTask(token: string, taskID: number) {
     let request = createRequest(
-        "user/task/" + taskID.toString(),
-        "DELETE",
+        "tasks/" + taskID.toString() + "/unselect",
+        "PUT",
         null,
         token
     );

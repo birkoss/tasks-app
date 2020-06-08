@@ -50,12 +50,15 @@ export default function App() {
                 dispatch({
                     type: "SETDATA",
                     payload: {
+                        id: data["id"],
                         rewards: data["rewards"],
                         groups: groups,
                         currentGroup: currentGroup,
                         isChildren: isChildren,
                     },
                 });
+
+                setIsLoading(false);
             })
             .catch((error) => console.log("GetData.catch", error));
     };
@@ -71,7 +74,6 @@ export default function App() {
                     },
                 });
             }
-            setIsLoading(false);
         } catch (error) {
             console.log(error);
         }
