@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { AsyncStorage, StatusBar } from "react-native";
+import { AsyncStorage } from "react-native";
 
-import Loading from "./app/screens/Loading";
+import LoadingScreen from "./app/screens/Loading";
 import Navigation from "./app/components/Navigation";
 
 import {
@@ -88,7 +88,7 @@ export default function App() {
     }, [state.token]);
 
     if (isLoading) {
-        return <Loading />;
+        return <LoadingScreen />;
     }
 
     return (

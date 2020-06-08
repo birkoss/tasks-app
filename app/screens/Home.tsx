@@ -15,7 +15,7 @@ type Props = {
     navigation: HomeScreenNavigationProp;
 };
 
-function Home({ navigation }: Props) {
+function HomeScreen({ navigation }: Props) {
     const { state } = useContext(AuthContext);
     let [tasks, setTasks] = useState<Task[]>([]);
 
@@ -91,4 +91,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Home;
+export default HomeScreen;

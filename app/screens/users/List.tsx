@@ -19,7 +19,7 @@ type Props = {
 export default function UserListScreen({ navigation }: Props) {
     let [users, setUsers] = useState<User[]>([]);
 
-    const { state, dispatch } = useContext(AuthContext);
+    const { state } = useContext(AuthContext);
 
     useEffect(() => {
         navigation.setOptions({

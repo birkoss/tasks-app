@@ -20,7 +20,7 @@ type Props = {
     navigation: LoginScreenNavigationProp;
 };
 
-export default function Login({ navigation }: Props) {
+export default function LoginScreen({ navigation }: Props) {
     return (
         <TouchableWithoutFeedback
             onPress={() => {

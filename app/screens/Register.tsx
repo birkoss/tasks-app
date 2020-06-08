@@ -19,7 +19,7 @@ type Props = {
     navigation: RegisterScreenNavigationProp;
 };
 
-export default function Register({ navigation }: Props) {
+export default function RegisterScreen({ navigation }: Props) {
     return (
         <TouchableWithoutFeedback
             onPress={() => {

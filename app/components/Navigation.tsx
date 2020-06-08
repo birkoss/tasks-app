@@ -13,9 +13,9 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { SideMenu } from "./SideMenu";
 
-import Login from "../screens/Login";
-import Register from "../screens/Register";
-import Home from "../screens/Home";
+import LoginScreen from "../screens/Login";
+import RegisterScreen from "../screens/Register";
+import HomeScreen from "../screens/Home";
 
 import TaskListScreen from "../screens/tasks/List";
 import TaskAddScreen from "../screens/tasks/Add";
@@ -38,8 +38,8 @@ const HomeStack = createStackNavigator<HomeStackParamList>();
 const HomeStackScreen = () => {
     return (
         <HomeStack.Navigator>
-            <HomeStack.Screen name="Home" component={Home} />
-            <HomeStack.Screen name="Details" component={Home} />
+            <HomeStack.Screen name="Home" component={HomeScreen} />
+            <HomeStack.Screen name="Details" component={HomeScreen} />
         </HomeStack.Navigator>
     );
 };
@@ -150,14 +150,14 @@ export default function Navigation() {
                 <AuthStack.Navigator headerMode="none">
                     <AuthStack.Screen
                         name="Login"
-                        component={Login}
+                        component={LoginScreen}
                         options={{
                             animationEnabled: false,
                         }}
                     />
                     <AuthStack.Screen
                         name="Register"
-                        component={Register}
+                        component={RegisterScreen}
                         options={{
                             animationEnabled: false,
                         }}
