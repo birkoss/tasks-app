@@ -147,6 +147,7 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                         </Left>
 
                         <Right>
+                            <Text>Created by {task.user.firstname}</Text>
                             {state.isChildren &&
                                 task.taskusers.length !== 0 && (
                                     <Text>

@@ -59,6 +59,7 @@ export interface Task {
     reward: number;
     description: string;
     taskusers: TaskUser[];
+    user: User;
 }
 
 export interface TaskUser {
