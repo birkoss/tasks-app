@@ -75,4 +75,10 @@ export interface User {
     rewards: number;
     is_children: boolean;
     firstname?: string;
+    groups: GroupUser[];
+}
+
+export interface GroupUser {
+    is_children: boolean;
+    group: Group;
 }

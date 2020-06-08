@@ -17,9 +17,18 @@ export function Users({ users }: Props) {
                         <Left>
                             <Content>
                                 <Text>{user.email}</Text>
-                                <Text note>
-                                    {user.is_children ? "Children" : "Parent"}
-                                </Text>
+
+                                {user.groups.map((groupUser) => (
+                                    <Text
+                                        key={user.id + "_" + groupUser.group.id}
+                                        note
+                                    >
+                                        {groupUser.group.name} -{" "}
+                                        {groupUser.is_children
+                                            ? "Children"
+                                            : "Parent"}
+                                    </Text>
+                                ))}
                             </Content>
                         </Left>
                         <Right>
