@@ -1,3 +1,9 @@
+/*
+ * @TODO: Group all tasks management in the same Screen (Lets back and forth)
+ * @TODO: Refresh the rewards on focus
+ * @TODO: Animation on screen while loading data...
+ */
+
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 
@@ -112,7 +118,7 @@ export default function App() {
     }, [state.token]);
 
     if (isLoading) {
-        return <LoadingScreen />;
+        return <LoadingScreen isLight={false} />;
     }
 
     return (

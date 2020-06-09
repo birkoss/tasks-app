@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, Alert } from "react-native";
 
 import { Container, Content } from "native-base";
 
@@ -10,12 +10,14 @@ import { HomeScreenNavigationProp, Task } from "../types";
 import { navigationDrawerScreenOptions } from "../styles/navigation";
 
 import { GetTasks } from "../api";
+import LoadingScreen from "./Loading";
 
 type Props = {
     navigation: HomeScreenNavigationProp;
 };
 
 function HomeScreen({ navigation }: Props) {
+    const [isLoading, setIsLoading] = useState(true);
     const { state } = useContext(AuthContext);
     let [tasks, setTasks] = useState<Task[]>([]);
 
@@ -27,6 +29,7 @@ function HomeScreen({ navigation }: Props) {
                     newTasks.push(task);
                 });
                 setTasks(newTasks);
+                setIsLoading(false);
             })
             .catch((error) => console.log("error", error));
     };
@@ -52,11 +55,16 @@ function HomeScreen({ navigation }: Props) {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", () => {
+            setIsLoading(true);
             getTasks();
         });
 
         return unsubscribe;
     }, [navigation]);
+
+    if (isLoading) {
+        return <LoadingScreen isLight={true} />;
+    }
 
     return (
         <Container>
