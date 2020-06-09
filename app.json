@@ -1,7 +1,7 @@
 {
     "expo": {
-        "name": "app-ts",
-        "slug": "app-ts",
+        "name": "Tasks",
+        "slug": "tasks",
         "platforms": ["ios", "android", "web"],
         "version": "1.0.0",
         "orientation": "portrait",
@@ -18,7 +18,7 @@
         "ios": {
             "supportsTablet": true,
             "bundleIdentifier": "com.birkoss.tasks",
-            "buildNumber": "1.0.0"
+            "buildNumber": "2"
         }
     }
 }

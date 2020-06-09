@@ -75,6 +75,15 @@ const TabsScreen = () => {
                 inactiveTintColor: "rgba(255, 255, 255, 0.8)",
                 activeBackgroundColor: "#2980b9",
                 activeTintColor: "#ffffff",
+                style: {
+                    backgroundColor: "#2980b9",
+                    borderTopWidth: 1,
+                    borderTopColor: "#353535",
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                },
             }}
         >
             <Tabs.Screen
