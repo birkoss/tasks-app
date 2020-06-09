@@ -1,3 +1,6 @@
+import { Notifications } from "expo";
+import * as Permissions from "expo-permissions";
+
 import React, { useState, useEffect } from "react";
 import { AsyncStorage } from "react-native";
 
@@ -10,7 +13,7 @@ import {
     AuthContextInitialValues,
 } from "./app/context";
 
-import { GetData } from "./app/api";
+import { GetData, UserNotification } from "./app/api";
 
 import { Group } from "./app/types";
 
@@ -26,7 +29,7 @@ export default function App() {
         if (state.token === "") {
             return;
         }
-
+        console.log("GetData(" + state.token + ")");
         GetData(state.token)
             .then((data) => {
                 // Get all the groups
@@ -58,12 +61,15 @@ export default function App() {
                     },
                 });
 
+                registerForPushNotifications();
+
                 setIsLoading(false);
             })
             .catch((error) => console.log("GetData.catch", error));
     };
 
     const getTokenFromStorage = async () => {
+        console.log("getTokenFromStorage");
         try {
             const token = await AsyncStorage.getItem("token");
             if (token !== null) {
@@ -73,10 +79,28 @@ export default function App() {
                         token,
                     },
                 });
+            } else {
+                setIsLoading(false);
             }
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const registerForPushNotifications = async () => {
+        const { status } = await Permissions.askAsync(
+            Permissions.NOTIFICATIONS
+        );
+        if (status !== "granted") {
+            alert("No notification permissions!");
+            return;
+        }
+
+        // Get the token that identifies this device
+        let token = await Notifications.getExpoPushTokenAsync();
+
+        // POST the token to your backend server from where you can retrieve it to send push notifications.
+        UserNotification(state.token, token);
     };
 
     useEffect(() => {

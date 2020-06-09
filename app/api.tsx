@@ -1,4 +1,4 @@
-const url = "http://127.0.0.1:8000/api/";
+const url = "http://192.168.0.136:8000/api/";
 
 class ApiError extends Error {
     constructor(...params: any[]) {
@@ -185,6 +185,19 @@ export function UserCompleteTask(token: string, taskID: number) {
         "tasks/" + taskID.toString() + "/complete",
         "PUT",
         null,
+        token
+    );
+
+    return fetchRequest(request, (data: any) => {
+        return {};
+    });
+}
+
+export function UserNotification(token: string, notificationToken: string) {
+    let request = createRequest(
+        "account",
+        "PUT",
+        { expoToken: notificationToken },
         token
     );
 
