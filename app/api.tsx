@@ -179,3 +179,16 @@ export function UserUnselectTask(token: string, taskID: number) {
         return {};
     });
 }
+
+export function UserCompleteTask(token: string, taskID: number) {
+    let request = createRequest(
+        "tasks/" + taskID.toString() + "/complete",
+        "PUT",
+        null,
+        token
+    );
+
+    return fetchRequest(request, (data: any) => {
+        return {};
+    });
+}

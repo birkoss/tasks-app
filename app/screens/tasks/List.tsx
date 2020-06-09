@@ -5,12 +5,11 @@ import { Container, Content, Button, Icon } from "native-base";
 import { TasksScreenNavigationProp } from "../../types";
 import { navigationDrawerScreenOptions } from "../../styles/navigation";
 
-import { GetTasks, AddTask } from "../../api";
+import { GetTasks } from "../../api";
 
 import { Tasks } from "../../components/Tasks";
 import { Task } from "../../types";
 import { AuthContext } from "../../context";
-import { globalStyles } from "../../styles/global";
 
 type Props = {
     navigation: TasksScreenNavigationProp;
@@ -22,7 +21,6 @@ const TaskListScreen = ({ navigation }: Props) => {
     const { state } = useContext(AuthContext);
 
     const getTasks = () => {
-        console.log("getTasks", state);
         GetTasks(state.token, state.currentGroup)
             .then((data) => {
                 let newTasks: Task[] = [];

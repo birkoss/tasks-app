@@ -60,6 +60,7 @@ export interface Task {
     description: string;
     taskusers: TaskUser[];
     user: User;
+    date_added: string;
 }
 
 export interface TaskUser {

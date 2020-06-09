@@ -15,7 +15,12 @@ import {
 
 import { Task } from "../types";
 import { AuthContext } from "../context";
-import { DeleteTask, UserSelectTask, UserUnselectTask } from "../api";
+import {
+    DeleteTask,
+    UserSelectTask,
+    UserUnselectTask,
+    UserCompleteTask,
+} from "../api";
 import { globalStyles } from "../styles/global";
 
 type Props = {
@@ -45,6 +50,12 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
             .catch((error) => Alert.alert(error.message));
     };
 
+    const completeTask = (taskID: number) => {
+        UserCompleteTask(state.token, taskID)
+            .then((data) => onRefresh())
+            .catch((error) => Alert.alert(error.message));
+    };
+
     const askConfirmation = (taskID: number) => {
         Alert.alert(
             "Confirmation",
@@ -58,6 +69,49 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                 { text: "Yes", onPress: () => deleteTask(taskID) },
             ],
             { cancelable: false }
+        );
+    };
+
+    const getRightContent = (task: Task) => {
+        if (
+            state.isChildren &&
+            task.taskusers.length !== 0 &&
+            onAdd === undefined
+        ) {
+            if (task.taskusers[0].date_completed === null) {
+                return (
+                    <Button transparent onPress={() => completeTask(task.id)}>
+                        <Icon
+                            style={styles.action}
+                            active
+                            name="ios-checkmark-circle"
+                        />
+                        <Text style={styles.action}>Mark as Completed</Text>
+                    </Button>
+                );
+            } else {
+                return (
+                    <Button transparent>
+                        <Icon
+                            style={styles.actionWait}
+                            active
+                            name="ios-time"
+                        />
+                        <Text style={styles.actionWait}>
+                            Waiting for confirmation
+                        </Text>
+                    </Button>
+                );
+            }
+        }
+
+        return (
+            <React.Fragment>
+                <Text>Created by {task.user.firstname}</Text>
+                {task.taskusers.length !== 0 && (
+                    <Text>Selected by {task.taskusers[0].user.firstname}</Text>
+                )}
+            </React.Fragment>
         );
     };
 
@@ -91,7 +145,7 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                             </View>
                             <Body>
                                 <Text>{task.name}</Text>
-                                <Text note>April 15, 2020</Text>
+                                <Text note>{task.date_added}</Text>
                             </Body>
                         </Left>
                     </CardItem>
@@ -115,18 +169,23 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                                     <Text style={styles.action}>Select</Text>
                                 </Button>
                             )}
+
                             {state.isChildren && task.taskusers.length !== 0 && (
-                                <Button
-                                    transparent
-                                    onPress={() => unselectTask(task.id)}
-                                >
-                                    <Icon
-                                        style={styles.action}
-                                        active
-                                        name="ios-remove-circle"
-                                    />
-                                    <Text style={styles.action}>Unselect</Text>
-                                </Button>
+                                <React.Fragment>
+                                    <Button
+                                        transparent
+                                        onPress={() => unselectTask(task.id)}
+                                    >
+                                        <Icon
+                                            style={styles.action}
+                                            active
+                                            name="ios-remove-circle"
+                                        />
+                                        <Text style={styles.action}>
+                                            Unselect
+                                        </Text>
+                                    </Button>
+                                </React.Fragment>
                             )}
 
                             {!state.isChildren && (
@@ -146,16 +205,7 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                             )}
                         </Left>
 
-                        <Right>
-                            <Text>Created by {task.user.firstname}</Text>
-                            {state.isChildren &&
-                                task.taskusers.length !== 0 && (
-                                    <Text>
-                                        Selected by{" "}
-                                        {task.taskusers[0].user.firstname}
-                                    </Text>
-                                )}
-                        </Right>
+                        <Right>{getRightContent(task)}</Right>
                     </CardItem>
                 </Card>
             ))}
@@ -166,6 +216,9 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
 const styles = StyleSheet.create({
     action: {
         color: "#2980b9",
+    },
+    actionWait: {
+        color: "#b4b4b4",
     },
     actionDelete: {
         color: "#bf1650",
