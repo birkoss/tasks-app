@@ -193,6 +193,19 @@ export function UserCompleteTask(token: string, taskID: number) {
     });
 }
 
+export function UserValidateTask(token: string, taskID: number) {
+    let request = createRequest(
+        "tasks/" + taskID.toString() + "/validate",
+        "PUT",
+        null,
+        token
+    );
+
+    return fetchRequest(request, (data: any) => {
+        return {};
+    });
+}
+
 export function UserNotification(token: string, notificationToken: string) {
     let request = createRequest(
         "account",

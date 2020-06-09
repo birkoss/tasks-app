@@ -29,7 +29,7 @@ export default function App() {
         if (state.token === "") {
             return;
         }
-        console.log("GetData(" + state.token + ")");
+
         GetData(state.token)
             .then((data) => {
                 // Get all the groups
@@ -92,7 +92,7 @@ export default function App() {
             Permissions.NOTIFICATIONS
         );
         if (status !== "granted") {
-            alert("No notification permissions!");
+            // alert("No notification permissions!");
             return;
         }
 

@@ -20,6 +20,7 @@ import {
     UserSelectTask,
     UserUnselectTask,
     UserCompleteTask,
+    UserValidateTask,
 } from "../api";
 import { globalStyles } from "../styles/global";
 
@@ -52,6 +53,12 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
 
     const completeTask = (taskID: number) => {
         UserCompleteTask(state.token, taskID)
+            .then((data) => onRefresh())
+            .catch((error) => Alert.alert(error.message));
+    };
+
+    const validateTask = (taskID: number) => {
+        UserValidateTask(state.token, taskID)
             .then((data) => onRefresh())
             .catch((error) => Alert.alert(error.message));
     };
@@ -115,6 +122,71 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
         );
     };
 
+    const getLeftContent = (task: Task) => {
+        if (state.isChildren) {
+            if (task.taskusers.length === 0) {
+                return (
+                    <Button transparent onPress={() => selectTask(task.id)}>
+                        <Icon
+                            style={styles.action}
+                            active
+                            name="ios-add-circle"
+                        />
+                        <Text style={styles.action}>Select</Text>
+                    </Button>
+                );
+            } else {
+                return (
+                    <Button transparent onPress={() => unselectTask(task.id)}>
+                        <Icon
+                            style={styles.action}
+                            active
+                            name="ios-remove-circle"
+                        />
+                        <Text style={styles.action}>Unselect</Text>
+                    </Button>
+                );
+            }
+        }
+
+        if (task.taskusers.length === 0) {
+            return (
+                <Button transparent onPress={() => askConfirmation(task.id)}>
+                    <Icon
+                        style={styles.actionDelete}
+                        active
+                        name="ios-remove-circle"
+                    />
+                    <Text style={styles.actionDelete}>Delete</Text>
+                </Button>
+            );
+        } else {
+            if (task.taskusers[0].date_completed === null) {
+                return (
+                    <Button transparent onPress={() => unselectTask(task.id)}>
+                        <Icon
+                            style={styles.action}
+                            active
+                            name="ios-remove-circle"
+                        />
+                        <Text style={styles.action}>Unselect</Text>
+                    </Button>
+                );
+            } else {
+                return (
+                    <Button transparent onPress={() => validateTask(task.id)}>
+                        <Icon
+                            style={styles.action}
+                            active
+                            name="ios-checkmark-circle"
+                        />
+                        <Text style={styles.action}>Validate</Text>
+                    </Button>
+                );
+            }
+        }
+    };
+
     if (tasks.length === 0) {
         return (
             <View style={globalStyles.emptyContainer}>
@@ -155,56 +227,7 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                         </Body>
                     </CardItem>
                     <CardItem footer bordered>
-                        <Left>
-                            {state.isChildren && task.taskusers.length === 0 && (
-                                <Button
-                                    transparent
-                                    onPress={() => selectTask(task.id)}
-                                >
-                                    <Icon
-                                        style={styles.action}
-                                        active
-                                        name="ios-add-circle"
-                                    />
-                                    <Text style={styles.action}>Select</Text>
-                                </Button>
-                            )}
-
-                            {state.isChildren && task.taskusers.length !== 0 && (
-                                <React.Fragment>
-                                    <Button
-                                        transparent
-                                        onPress={() => unselectTask(task.id)}
-                                    >
-                                        <Icon
-                                            style={styles.action}
-                                            active
-                                            name="ios-remove-circle"
-                                        />
-                                        <Text style={styles.action}>
-                                            Unselect
-                                        </Text>
-                                    </Button>
-                                </React.Fragment>
-                            )}
-
-                            {!state.isChildren && (
-                                <Button
-                                    transparent
-                                    onPress={() => askConfirmation(task.id)}
-                                >
-                                    <Icon
-                                        style={styles.actionDelete}
-                                        active
-                                        name="ios-remove-circle"
-                                    />
-                                    <Text style={styles.actionDelete}>
-                                        Delete
-                                    </Text>
-                                </Button>
-                            )}
-                        </Left>
-
+                        <Left>{getLeftContent(task)}</Left>
                         <Right>{getRightContent(task)}</Right>
                     </CardItem>
                 </Card>
