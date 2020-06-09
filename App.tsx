@@ -13,6 +13,9 @@ import { AsyncStorage } from "react-native";
 import LoadingScreen from "./app/screens/Loading";
 import Navigation from "./app/components/Navigation";
 
+import * as Font from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
+
 import {
     AuthContext,
     AuthContextReducer,
@@ -110,6 +113,15 @@ export default function App() {
     };
 
     useEffect(() => {
+        const loadFonts = async () => {
+            await Font.loadAsync({
+                Roboto: require("native-base/Fonts/Roboto.ttf"),
+                Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+                ...Ionicons.font,
+            });
+        };
+
+        loadFonts();
         getTokenFromStorage();
     }, []);
 

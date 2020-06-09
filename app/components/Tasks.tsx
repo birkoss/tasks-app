@@ -1,3 +1,5 @@
+import "intl";
+import "intl/locale-data/jsonp/en";
 import React, { useContext } from "react";
 
 import { StyleSheet, View, Alert } from "react-native";
@@ -11,6 +13,8 @@ import {
     Right,
     Card,
     CardItem,
+    Grid,
+    Col,
 } from "native-base";
 
 import { Task } from "../types";
@@ -79,12 +83,67 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
         );
     };
 
-    const getRightContent = (task: Task) => {
-        if (
-            state.isChildren &&
-            task.taskusers.length !== 0 &&
-            onAdd === undefined
-        ) {
+    const getMainAction = (task: Task) => {
+        if (state.isChildren) {
+            if (task.taskusers.length === 0) {
+                return (
+                    <Button transparent onPress={() => selectTask(task.id)}>
+                        <Icon
+                            style={styles.action}
+                            active
+                            name="ios-add-circle"
+                        />
+                        <Text style={styles.action}>Select</Text>
+                    </Button>
+                );
+            } else {
+                return (
+                    <Button transparent onPress={() => unselectTask(task.id)}>
+                        <Icon
+                            style={styles.action}
+                            active
+                            name="ios-remove-circle"
+                        />
+                        <Text style={styles.action}>Unselect</Text>
+                    </Button>
+                );
+            }
+        } else {
+            if (task.taskusers.length === 0) {
+                return (
+                    <Button
+                        transparent
+                        onPress={() => askConfirmation(task.id)}
+                    >
+                        <Icon
+                            style={styles.actionDelete}
+                            active
+                            name="ios-remove-circle"
+                        />
+                        <Text style={styles.actionDelete}>Delete</Text>
+                    </Button>
+                );
+            } else {
+                return (
+                    <Button transparent onPress={() => unselectTask(task.id)}>
+                        <Icon
+                            style={styles.action}
+                            active
+                            name="ios-remove-circle"
+                        />
+                        <Text style={styles.action}>Unselect</Text>
+                    </Button>
+                );
+            }
+        }
+    };
+
+    const getSecondaryAction = (task: Task) => {
+        if (task.taskusers.length == 0) {
+            return null;
+        }
+
+        if (state.isChildren) {
             if (task.taskusers[0].date_completed === null) {
                 return (
                     <Button transparent onPress={() => completeTask(task.id)}>
@@ -110,69 +169,8 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                     </Button>
                 );
             }
-        }
-
-        return (
-            <React.Fragment>
-                <Text>Created by {task.user.firstname}</Text>
-                {task.taskusers.length !== 0 && (
-                    <Text>Selected by {task.taskusers[0].user.firstname}</Text>
-                )}
-            </React.Fragment>
-        );
-    };
-
-    const getLeftContent = (task: Task) => {
-        if (state.isChildren) {
-            if (task.taskusers.length === 0) {
-                return (
-                    <Button transparent onPress={() => selectTask(task.id)}>
-                        <Icon
-                            style={styles.action}
-                            active
-                            name="ios-add-circle"
-                        />
-                        <Text style={styles.action}>Select</Text>
-                    </Button>
-                );
-            } else {
-                return (
-                    <Button transparent onPress={() => unselectTask(task.id)}>
-                        <Icon
-                            style={styles.action}
-                            active
-                            name="ios-remove-circle"
-                        />
-                        <Text style={styles.action}>Unselect</Text>
-                    </Button>
-                );
-            }
-        }
-
-        if (task.taskusers.length === 0) {
-            return (
-                <Button transparent onPress={() => askConfirmation(task.id)}>
-                    <Icon
-                        style={styles.actionDelete}
-                        active
-                        name="ios-remove-circle"
-                    />
-                    <Text style={styles.actionDelete}>Delete</Text>
-                </Button>
-            );
         } else {
-            if (task.taskusers[0].date_completed === null) {
-                return (
-                    <Button transparent onPress={() => unselectTask(task.id)}>
-                        <Icon
-                            style={styles.action}
-                            active
-                            name="ios-remove-circle"
-                        />
-                        <Text style={styles.action}>Unselect</Text>
-                    </Button>
-                );
-            } else {
+            if (task.taskusers[0].date_completed !== null) {
                 return (
                     <Button transparent onPress={() => validateTask(task.id)}>
                         <Icon
@@ -181,6 +179,19 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                             name="ios-checkmark-circle"
                         />
                         <Text style={styles.action}>Validate</Text>
+                    </Button>
+                );
+            } else {
+                return (
+                    <Button transparent>
+                        <Icon
+                            style={styles.actionWait}
+                            active
+                            name="ios-time"
+                        />
+                        <Text style={styles.actionWait}>
+                            Waiting for completion
+                        </Text>
                     </Button>
                 );
             }
@@ -216,8 +227,43 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                                 </View>
                             </View>
                             <Body>
-                                <Text>{task.name}</Text>
-                                <Text note>{task.date_added}</Text>
+                                <Text style={{ fontWeight: "bold" }}>
+                                    {task.name}
+                                </Text>
+
+                                <Grid style={{ paddingTop: 4 }}>
+                                    <Col>
+                                        <Text style={styles.textHeader}>
+                                            <Icon
+                                                name="ios-calendar"
+                                                style={styles.textHeader}
+                                            />
+                                            {"  "}
+                                            {new Intl.DateTimeFormat("en-CA", {
+                                                year: "numeric",
+                                                month: "long",
+                                                day: "2-digit",
+                                            }).format(
+                                                Date.parse(task.date_added)
+                                            )}
+                                        </Text>
+                                    </Col>
+                                    {task.taskusers.length !== 0 && (
+                                        <Col>
+                                            <Text style={styles.textHeader}>
+                                                <Icon
+                                                    name="ios-person"
+                                                    style={styles.textHeader}
+                                                />
+                                                {"  "}
+                                                {
+                                                    task.taskusers[0].user
+                                                        .firstname
+                                                }
+                                            </Text>
+                                        </Col>
+                                    )}
+                                </Grid>
                             </Body>
                         </Left>
                     </CardItem>
@@ -226,10 +272,16 @@ export function Tasks({ tasks, onRefresh, onAdd }: Props) {
                             <Text>{task.description}</Text>
                         </Body>
                     </CardItem>
-                    <CardItem footer bordered>
-                        <Left>{getLeftContent(task)}</Left>
-                        <Right>{getRightContent(task)}</Right>
-                    </CardItem>
+                    {(!state.isChildren ||
+                        (state.isChildren &&
+                            (task.taskusers.length === 0 ||
+                                task.taskusers[0].user.id ===
+                                    state.userID))) && (
+                        <CardItem footer bordered>
+                            <Left>{getMainAction(task)}</Left>
+                            <Right>{getSecondaryAction(task)}</Right>
+                        </CardItem>
+                    )}
                 </Card>
             ))}
         </React.Fragment>
@@ -245,6 +297,10 @@ const styles = StyleSheet.create({
     },
     actionDelete: {
         color: "#bf1650",
+    },
+    textHeader: {
+        fontSize: 16,
+        color: "#999999",
     },
     rewardContainer: {
         backgroundColor: "#2980b9",

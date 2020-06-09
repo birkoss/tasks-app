@@ -10,17 +10,20 @@ import { GetTasks } from "../../api";
 import { Tasks } from "../../components/Tasks";
 import { Task } from "../../types";
 import { AuthContext } from "../../context";
+import LoadingScreen from "../Loading";
 
 type Props = {
     navigation: TasksScreenNavigationProp;
 };
 
 const TaskListScreen = ({ navigation }: Props) => {
+    let [isLoading, setIsLoading] = useState(true);
     let [tasks, setTasks] = useState<Task[]>([]);
 
     const { state } = useContext(AuthContext);
 
     const getTasks = () => {
+        setIsLoading(true);
         GetTasks(state.token, state.currentGroup)
             .then((data) => {
                 let newTasks: Task[] = [];
@@ -28,6 +31,7 @@ const TaskListScreen = ({ navigation }: Props) => {
                     newTasks.push(task);
                 });
                 setTasks(newTasks);
+                setIsLoading(false);
             })
             .catch((error) => console.log("error", error));
     };
@@ -70,9 +74,19 @@ const TaskListScreen = ({ navigation }: Props) => {
         return unsubscribe;
     }, [navigation]);
 
+    if (isLoading) {
+        return <LoadingScreen isLight={true} />;
+    }
+
     return (
         <Container>
-            <Content contentContainerStyle={{ flexGrow: 1 }}>
+            <Content
+                contentContainerStyle={{
+                    flexGrow: 1,
+                    padding: 8,
+                    backgroundColor: "#f4f4f4",
+                }}
+            >
                 <Tasks tasks={tasks} onRefresh={getTasks} onAdd={addTask} />
             </Content>
         </Container>

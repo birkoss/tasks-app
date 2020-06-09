@@ -70,7 +70,7 @@ export interface TaskUser {
 }
 
 export interface User {
-    id: string;
+    id: number;
     name: string;
     email: string;
     rewards: number;

@@ -87,15 +87,15 @@ const TabsScreen = () => {
             }}
         >
             <Tabs.Screen
-                name="Home"
-                component={HomeStackScreen}
+                name="Tasks"
+                component={TasksStackScreen}
                 options={{
-                    tabBarLabel: "My Tasks",
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons
-                            name="ios-information-circle"
+                        <IconWithBadge
+                            name="ios-list"
                             size={size}
                             color={color}
+                            badgeCount={3}
                         />
                     ),
                 }}
@@ -116,21 +116,6 @@ const TabsScreen = () => {
                     }}
                 />
             )}
-            <Tabs.Screen
-                name="Tasks"
-                component={TasksStackScreen}
-                options={{
-                    tabBarLabel: "All Tasks",
-                    tabBarIcon: ({ color, size }) => (
-                        <IconWithBadge
-                            name="ios-list"
-                            size={size}
-                            color={color}
-                            badgeCount={3}
-                        />
-                    ),
-                }}
-            />
         </Tabs.Navigator>
     );
 };
